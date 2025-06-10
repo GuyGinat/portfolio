@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import Link from "next/link";
 import BackgroundWithControls from "../components/BackgroundWithControls";
 
 const geistSans = localFont({
@@ -35,26 +34,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <BackgroundWithControls />
-        <nav className="fixed top-0 w-full backdrop-blur-sm border-b border-gray-200/20 z-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between h-16 items-center">
-              <Link href="/" className="text-xl font-bold text-indigo-600">Guy Ginat</Link>
-              <div className="flex space-x-4">
-                <Link href="/" className="nav-link">Home</Link>
-                <Link href="/games" className="nav-link">Games</Link>
-                <Link href="/tech" className="nav-link">Tech & Code</Link>
-                <Link href="/writing" className="nav-link">Game Design</Link>
-                <Link href="/about" className="nav-link">About</Link>
-              </div>
-            </div>
-          </div>
-        </nav>
-        <div className="relative">
-          <main className="pt-20 min-h-screen px-4 sm:px-8 pb-12">
-            {children}
-          </main>
-        </div>
+        <BackgroundWithControls>{children}</BackgroundWithControls>
       </body>
     </html>
   );
