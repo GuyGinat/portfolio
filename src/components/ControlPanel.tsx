@@ -1,4 +1,8 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
+import { GRID_SIZE_X, GRID_SIZE_Y } from './ThreeBackground';
+import Tween from '@tweenjs/tween.js';
+import { useColorTween } from '../hooks/useColorTween';
+import { tinyFont } from '@/data/tinyFont';
 
 interface ControlPanelProps {
   onColor1Change: (color: string) => void;
@@ -21,8 +25,8 @@ interface ControlPanelProps {
   setShowMain: (show: boolean) => void;
   spacingOffset: number;
   setSpacingOffset: (v: number) => void;
-  customCubeColors: { [key: string]: string };
-  setCustomCubeColor: (gridX: number, gridY: number, color: string) => void;
+  customCubeColors: { [key: string]: { color1: string; color2: string } };
+  setCustomCubeColor: (gridX: number, gridY: number, color1: string, color2: string) => void;
   resetAll: () => void;
 }
 
@@ -57,6 +61,8 @@ function useDragNumber(value: number, setValue: (v: number) => void, step = 0.1)
   };
   return { ref, onMouseDown };
 }
+
+type TabType = 'colors' | 'wave' | 'camera' | 'light';
 
 export default function ControlPanel({
   onColor1Change,
@@ -93,7 +99,12 @@ export default function ControlPanel({
   const [selectedGridX, setSelectedGridX] = useState(0);
   const [selectedGridY, setSelectedGridY] = useState(0);
   const selectedKey = `${selectedGridX}-${selectedGridY}`;
-  const selectedColor = customCubeColors[selectedKey] || "#ffffff";
+  const selectedColor1 = customCubeColors[selectedKey]?.color1 || "#ffffff";
+  const selectedColor2 = customCubeColors[selectedKey]?.color2 || "#ffffff";
+  const [fullLerpColor1, setFullLerpColor1] = useState("#ffffff");
+  const [fullLerpColor2, setFullLerpColor2] = useState("#cccccc");
+  const [activeTab, setActiveTab] = useState<TabType>('colors');
+  const { tweenCubeColors } = useColorTween();
 
   // Drag controls for camera
   const camX = useDragNumber(cameraPosition[0], v => setCameraPosition([v, cameraPosition[1], cameraPosition[2]]));
@@ -133,101 +144,213 @@ export default function ControlPanel({
     setCameraFov(parseFloat(e.target.value));
   };
 
-  return (
-    <div className="fixed bottom-4 right-4 z-[100]">
-      {/* Toggle Button */}
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 
-                   hover:bg-white/20 transition-all duration-300 flex items-center justify-center"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-6 w-6 text-white"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
-          />
-        </svg>
-      </button>
+  function lerpColor(color1: string, color2: string, t: number) {
+    // lerp between hex colors
+    const r1 = parseInt(color1.slice(1, 3), 16);
+    const g1 = parseInt(color1.slice(3, 5), 16);
+    const b1 = parseInt(color1.slice(5, 7), 16);
 
-      {/* Control Panel */}
-      {isOpen && (
-        <div className="absolute bottom-16 right-0 w-80 bg-white/10 backdrop-blur-md rounded-lg p-4 
-                        border border-white/20 shadow-lg">
-          <div className="space-y-4">
-            {/* Reset All Button */}
-            <div className="flex justify-end mb-2">
-              <button
-                onClick={resetAll}
-                className="px-3 py-1 rounded bg-red-500 text-white text-xs font-bold hover:bg-red-600 transition"
-              >
-                Reset All
-              </button>
-            </div>
-            {/* Show Main Content Toggle */}
-            <div className="flex items-center mb-2">
-              <input
-                id="show-main-toggle"
-                type="checkbox"
-                checked={showMain}
-                onChange={e => setShowMain(e.target.checked)}
-                className="mr-2 accent-indigo-500"
-              />
-              <label htmlFor="show-main-toggle" className="text-white text-sm select-none cursor-pointer">
-                Show Main Content
-              </label>
-            </div>
+    const r2 = parseInt(color2.slice(1, 3), 16);
+    const g2 = parseInt(color2.slice(3, 5), 16);
+    const b2 = parseInt(color2.slice(5, 7), 16);
+    const r = Math.round(r1 + (r2 - r1) * t);
+    const g = Math.round(g1 + (g2 - g1) * t);
+    const b = Math.round(b1 + (b2 - b1) * t);
+
+    const toHex = (n: number) => n.toString(16).padStart(2, '0');
+    return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+  }
+
+  const group = useRef(new Tween.Group());
+
+  useEffect(() => {
+    function animate() {
+      requestAnimationFrame(animate);
+      group.current.update();
+    }
+    animate();
+  }, []);
+
+  function lerpCubeColors(x: number, y: number, c1: string, c2: string) {
+    if (x < 0 || x >= GRID_SIZE_X || y < 0 || y >= GRID_SIZE_Y) return;
+    const selectedKey = `${x}-${y}`;
+    const selectedColor1 = customCubeColors[selectedKey]?.color1 || color1;
+    const selectedColor2 = customCubeColors[selectedKey]?.color2 || color2;
+    
+    tweenCubeColors(
+      x, y,
+      selectedColor1, selectedColor2,
+      c1, c2,
+      1000,
+      (newColor1, newColor2) => setCustomCubeColor(x, y, newColor1, newColor2)
+    );
+  }
+
+  const lerpAllCubes = () => {
+    for (let x = 0; x < GRID_SIZE_X; x++) {
+      for (let y = 0; y < GRID_SIZE_Y; y++) {
+        setTimeout(() => {
+          lerpCubeColors(x, y, fullLerpColor1, fullLerpColor2);
+        }, 100 * x);
+      }
+    }
+  }
+
+  const writeLetter = (char: string, x: number, y: number) => {
+    const rows = tinyFont[char.toUpperCase()];
+    if (!rows) return;
+    rows.forEach((row, rowIndex) => {
+      for (let col = 0; col < 3; col++) {
+        if ((row >> (2 - col)) & 1) {
+          lerpCubeColors(x + col, GRID_SIZE_Y - 1 - rowIndex - y, fullLerpColor1, fullLerpColor2);
+        }
+      }
+    });
+  }
+
+  const writeText = (text: string, x: number, y: number) => {
+    for (let i = 0; i < text.length; i++) {
+      writeLetter(text[i], x + i * 4, y);
+    }
+  }
+
+  const floodFill = (x: number, y: number, color1: string, color2: string) => {
+    const selectedKey = `${x}-${y}`;
+    const visited = new Set<string>();
+    const queue: [number, number][] = [[x, y]];
+    while (queue.length > 0) {
+      const [nextX, nextY] = queue.shift()!;
+      const selectedKey = `${nextX}-${nextY}`;
+      if (visited.has(selectedKey)) continue;
+      visited.add(selectedKey);
+      const delay = (Math.abs(x - nextX) + Math.abs(y - nextY)) * 100;
+      if (nextX < 0 || nextX >= GRID_SIZE_X || nextY < 0 || nextY >= GRID_SIZE_Y) continue;
+      queue.push([nextX + 1, nextY], [nextX - 1, nextY], [nextX, nextY + 1], [nextX, nextY - 1]);
+      setTimeout(() => lerpCubeColors(nextX, nextY, color1, color2), delay);
+    }
+  }
+
+  const floodFillTest = () => {
+    floodFill(14, 10, "#000000", "#ffffff");
+  }
+
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case 'colors':
+        return (
+          <>
             {/* Color pickers */}
             <div>
               <label className="block text-sm text-white mb-1">Color 1</label>
-              <input
-                type="color"
-                value={color1}
-                onChange={handleColor1Change}
-                className="w-full h-8 rounded"
-              />
+              <div className="flex items-center space-x-4">
+                <input
+                  type="color"
+                  value={color1}
+                  onChange={handleColor1Change}
+                  className="flex-1 h-8 rounded"
+                />
+                <button className='flex-4 h-8 rounded bg-black/30 text-white px-1'>Change</button>
+              </div>
             </div>
             <div>
               <label className="block text-sm text-white mb-1">Color 2</label>
-              <input
-                type="color"
-                value={color2}
-                onChange={handleColor2Change}
-                className="w-full h-8 rounded"
-              />
-            </div>
-            {/* Light Position (Unity style) */}
-            <div>
-              <label className="block text-sm text-white mb-1">Light Position</label>
-              <div className="flex items-center space-x-2">
-                <div ref={lightX.ref} onMouseDown={lightX.onMouseDown} className="flex items-center cursor-ew-resize select-none">
-                  <span className="w-4 text-xs font-bold text-red-400">X</span>
-                  <input type="number" value={light[0]} step={0.1} min={-10} max={10}
-                    onChange={e => { const v = parseFloat(e.target.value); setLight([v, light[1], light[2]]); onLightPositionChange([v, light[1], light[2]]); }}
-                    className="w-16 mx-1 rounded bg-black/30 text-white px-1" />
-                </div>
-                <div ref={lightY.ref} onMouseDown={lightY.onMouseDown} className="flex items-center cursor-ew-resize select-none">
-                  <span className="w-4 text-xs font-bold text-green-400">Y</span>
-                  <input type="number" value={light[1]} step={0.1} min={-10} max={10}
-                    onChange={e => { const v = parseFloat(e.target.value); setLight([light[0], v, light[2]]); onLightPositionChange([light[0], v, light[2]]); }}
-                    className="w-16 mx-1 rounded bg-black/30 text-white px-1" />
-                </div>
-                <div ref={lightZ.ref} onMouseDown={lightZ.onMouseDown} className="flex items-center cursor-ew-resize select-none">
-                  <span className="w-4 text-xs font-bold text-blue-400">Z</span>
-                  <input type="number" value={light[2]} step={0.1} min={-10} max={10}
-                    onChange={e => { const v = parseFloat(e.target.value); setLight([light[0], light[1], v]); onLightPositionChange([light[0], light[1], v]); }}
-                    className="w-16 mx-1 rounded bg-black/30 text-white px-1" />
-                </div>
+              <div className="flex items-center space-x-4">
+                <input
+                  type="color"
+                  value={color2}
+                  onChange={handleColor2Change}
+                  className="flex-1 h-8 rounded"
+                />
+                <button className='flex-4 h-8 rounded bg-black/30 text-white px-1'>Change</button>
               </div>
             </div>
-            {/* Camera Position (Unity style) */}
+            {/* Custom Cube Color Picker */}
+            <div>
+              <label className="block text-sm text-white mb-1">Set Cube Colors</label>
+              <div className="flex items-center space-x-2 mb-2">
+                <span className="text-xs text-white">X</span>
+                <input type="number" min={0} max={19} value={selectedGridX} onChange={e => setSelectedGridX(Number(e.target.value))} className="w-12 rounded bg-black/30 text-white px-1" />
+                <span className="text-xs text-white">Y</span>
+                <input type="number" min={0} max={19} value={selectedGridY} onChange={e => setSelectedGridY(Number(e.target.value))} className="w-12 rounded bg-black/30 text-white px-1" />
+                <input type="color" value={selectedColor1} onChange={e => setCustomCubeColor(selectedGridX, selectedGridY, e.target.value, selectedColor2)} />
+                <input type="color" value={selectedColor2} onChange={e => setCustomCubeColor(selectedGridX, selectedGridY, selectedColor1, e.target.value)} />
+              </div>
+            </div>
+            {/* All cubes lerp */}
+            <div>
+              <label className="block text-sm text-white mb-1">All cubes lerp</label>
+              <div className="flex items-center space-x-2">
+                <input className='flex-1' type="color" value={fullLerpColor1} onChange={e => setFullLerpColor1(e.target.value)} />
+                <input className='flex-1'type="color" value={fullLerpColor2} onChange={e => setFullLerpColor2(e.target.value)} />
+                <button onClick={() => lerpAllCubes()} className="flex-1 bg-black/30 text-white px-1">Lerp All</button>
+              </div>
+            </div>
+            <div>
+              <button onClick={() => floodFillTest()} className="w-full bg-black/30 text-white px-1">Flood Fill</button>
+            </div>
+            <div>
+              <button onClick={() => writeText("what", 1, 1)} className="w-full bg-black/30 text-white px-1">Write Text</button>
+            </div>
+          </>
+        );
+      case 'wave':
+        return (
+          <>
+            {/* Sine wave controls */}
+            <div>
+              <label className="block text-sm text-white mb-1">Wave Amplitude <span className="ml-2 text-xs text-white/70">{waveAmplitude}</span></label>
+              <input
+                type="range"
+                min="0"
+                max="3"
+                step="0.1"
+                value={waveAmplitude}
+                onChange={handleWaveAmplitudeChange}
+                className="w-full"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-white mb-1">Wave Frequency <span className="ml-2 text-xs text-white/70">{waveFrequency}</span></label>
+              <input
+                type="range"
+                min="0.01"
+                max="0.5"
+                step="0.01"
+                value={waveFrequency}
+                onChange={handleWaveFrequencyChange}
+                className="w-full"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-white mb-1">Wave Speed <span className="ml-2 text-xs text-white/70">{waveSpeed}</span></label>
+              <input
+                type="range"
+                min="-10"
+                max="10"
+                step="0.1"
+                value={waveSpeed}
+                onChange={handleWaveSpeedChange}
+                className="w-full"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-white mb-1">Spacing <span className="ml-2 text-xs text-white/70">{spacingOffset}</span></label>
+              <input
+                type="range"
+                min="0"
+                max="2"
+                step="0.01"
+                value={spacingOffset}
+                onChange={e => setSpacingOffset(parseFloat(e.target.value))}
+                className="w-full"
+              />
+            </div>
+          </>
+        );
+      case 'camera':
+        return (
+          <>
+            {/* Camera Position */}
             <div>
               <label className="block text-sm text-white mb-1">Camera Position</label>
               <div className="flex items-center space-x-2">
@@ -264,66 +387,109 @@ export default function ControlPanel({
                 className="w-full"
               />
             </div>
-            {/* Sine wave controls with value indicators */}
+          </>
+        );
+      case 'light':
+        return (
+          <>
+            {/* Light Position */}
             <div>
-              <label className="block text-sm text-white mb-1">Wave Amplitude <span className="ml-2 text-xs text-white/70">{waveAmplitude}</span></label>
-              <input
-                type="range"
-                min="0"
-                max="3"
-                step="0.1"
-                value={waveAmplitude}
-                onChange={handleWaveAmplitudeChange}
-                className="w-full"
-              />
-            </div>
-            <div>
-              <label className="block text-sm text-white mb-1">Wave Frequency <span className="ml-2 text-xs text-white/70">{waveFrequency}</span></label>
-              <input
-                type="range"
-                min="0.1"
-                max="0.5"
-                step="0.01"
-                value={waveFrequency}
-                onChange={handleWaveFrequencyChange}
-                className="w-full"
-              />
-            </div>
-            <div>
-              <label className="block text-sm text-white mb-1">Wave Speed <span className="ml-2 text-xs text-white/70">{waveSpeed}</span></label>
-              <input
-                type="range"
-                min="1"
-                max="10"
-                step="0.1"
-                value={waveSpeed}
-                onChange={handleWaveSpeedChange}
-                className="w-full"
-              />
-            </div>
-            {/* Spacing Offset Slider */}
-            <div>
-              <label className="block text-sm text-white mb-1">Spacing <span className="ml-2 text-xs text-white/70">{spacingOffset}</span></label>
-              <input
-                type="range"
-                min="0"
-                max="2"
-                step="0.01"
-                value={spacingOffset}
-                onChange={e => setSpacingOffset(parseFloat(e.target.value))}
-                className="w-full"
-              />
-            </div>
-            {/* Custom Cube Color Picker */}
-            <div>
-              <label className="block text-sm text-white mb-1">Set Cube Color</label>
-              <div className="flex items-center space-x-2 mb-2">
-                <span className="text-xs text-white">X</span>
-                <input type="number" min={0} max={19} value={selectedGridX} onChange={e => setSelectedGridX(Number(e.target.value))} className="w-12 rounded bg-black/30 text-white px-1" />
-                <span className="text-xs text-white">Y</span>
-                <input type="number" min={0} max={19} value={selectedGridY} onChange={e => setSelectedGridY(Number(e.target.value))} className="w-12 rounded bg-black/30 text-white px-1" />
-                <input type="color" value={selectedColor} onChange={e => setCustomCubeColor(selectedGridX, selectedGridY, e.target.value)} />
+              <label className="block text-sm text-white mb-1">Light Position</label>
+              <div className="flex items-center space-x-2">
+                <div ref={lightX.ref} onMouseDown={lightX.onMouseDown} className="flex items-center cursor-ew-resize select-none">
+                  <span className="w-4 text-xs font-bold text-red-400">X</span>
+                  <input type="number" value={light[0]} step={0.1} min={-10} max={10}
+                    onChange={e => { const v = parseFloat(e.target.value); setLight([v, light[1], light[2]]); onLightPositionChange([v, light[1], light[2]]); }}
+                    className="w-16 mx-1 rounded bg-black/30 text-white px-1" />
+                </div>
+                <div ref={lightY.ref} onMouseDown={lightY.onMouseDown} className="flex items-center cursor-ew-resize select-none">
+                  <span className="w-4 text-xs font-bold text-green-400">Y</span>
+                  <input type="number" value={light[1]} step={0.1} min={-10} max={10}
+                    onChange={e => { const v = parseFloat(e.target.value); setLight([light[0], v, light[2]]); onLightPositionChange([light[0], v, light[2]]); }}
+                    className="w-16 mx-1 rounded bg-black/30 text-white px-1" />
+                </div>
+                <div ref={lightZ.ref} onMouseDown={lightZ.onMouseDown} className="flex items-center cursor-ew-resize select-none">
+                  <span className="w-4 text-xs font-bold text-blue-400">Z</span>
+                  <input type="number" value={light[2]} step={0.1} min={-10} max={10}
+                    onChange={e => { const v = parseFloat(e.target.value); setLight([light[0], light[1], v]); onLightPositionChange([light[0], light[1], v]); }}
+                    className="w-16 mx-1 rounded bg-black/30 text-white px-1" />
+                </div>
               </div>
+            </div>
+          </>
+        );
+    }
+  };
+
+  return (
+    <div className="fixed bottom-4 right-4 z-[100]">
+      {/* Toggle Button */}
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 
+                   hover:bg-white/20 transition-all duration-300 flex items-center justify-center"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-6 w-6 text-white"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
+          />
+        </svg>
+      </button>
+
+      {/* Control Panel */}
+      {isOpen && (
+        <div className="absolute bottom-16 right-0 w-80 bg-black/30 backdrop-blur-md rounded-lg p-4 
+                        border border-white/20 shadow-lg">
+          <div className="space-y-4">
+            {/* Reset All Button */}
+            <div className="flex justify-end mb-2">
+              <button
+                onClick={resetAll}
+                className="px-3 py-1 rounded bg-red-500 text-white text-xs font-bold hover:bg-red-600 transition"
+              >
+                Reset All
+              </button>
+            </div>
+            {/* Show Main Content Toggle */}
+            <div className="flex items-center mb-2">
+              <input
+                id="show-main-toggle"
+                type="checkbox"
+                checked={showMain}
+                onChange={e => setShowMain(e.target.checked)}
+                className="mr-2 accent-indigo-500"
+              />
+              <label htmlFor="show-main-toggle" className="text-white text-sm select-none cursor-pointer">
+                Show Main Content
+              </label>
+            </div>
+            {/* Tabs */}
+            <div className="flex space-x-1 mb-4">
+              {(['colors', 'wave', 'camera', 'light'] as TabType[]).map((tab) => (
+                <button
+                  key={tab}
+                  onClick={() => setActiveTab(tab)}
+                  className={`flex-1 px-2 py-1 text-xs font-medium rounded transition-colors
+                    ${activeTab === tab 
+                      ? 'bg-indigo-500 text-white' 
+                      : 'bg-black/30 text-white/70 hover:bg-black/50'}`}
+                >
+                  {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                </button>
+              ))}
+            </div>
+            {/* Tab Content */}
+            <div className="space-y-4">
+              {renderTabContent()}
             </div>
           </div>
         </div>

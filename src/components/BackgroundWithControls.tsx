@@ -6,13 +6,13 @@ import Link from "next/link";
 
 const DEFAULT_COLOR1 = "#4338ca";
 const DEFAULT_COLOR2 = "#7e22ce";
-const DEFAULT_LIGHT_POSITION: [number, number, number] = [0, 5, 5];
+const DEFAULT_LIGHT_POSITION: [number, number, number] = [0, 6, 5];
 const DEFAULT_WAVE_AMPLITUDE = 1.8;
 const DEFAULT_WAVE_FREQUENCY = 0.3;
 const DEFAULT_WAVE_SPEED = 4.5;
 const DEFAULT_CAMERA_POSITION: [number, number, number] = [0, 0, 8];
-const DEFAULT_CAMERA_FOV = 60;
-const DEFAULT_SPACING_OFFSET = 0.2;
+const DEFAULT_CAMERA_FOV = 80;
+const DEFAULT_SPACING_OFFSET = 0.1;
 
 export default function BackgroundWithControls({ children }: { children: ReactNode }) {
   const [color1, setColor1] = useState(DEFAULT_COLOR1);
@@ -25,14 +25,14 @@ export default function BackgroundWithControls({ children }: { children: ReactNo
   const [cameraFov, setCameraFov] = useState(DEFAULT_CAMERA_FOV);
   const [showMain, setShowMainState] = useState(true);
   const [spacingOffset, setSpacingOffset] = useState(DEFAULT_SPACING_OFFSET);
-  const [customCubeColors, setCustomCubeColors] = useState<{ [key: string]: string }>({});
+  const [customCubeColors, setCustomCubeColors] = useState<{ [key: string]: { color1: string; color2: string } }>({});
 
   const handleShowMain = (show: boolean) => {
     setShowMainState(show);
   };
 
-  const handleSetCubeColor = (gridX: number, gridY: number, color: string) => {
-    setCustomCubeColors(prev => ({ ...prev, [`${gridX}-${gridY}`]: color }));
+  const handleSetCubeColor = (gridX: number, gridY: number, color1: string, color2: string) => {
+    setCustomCubeColors(prev => ({ ...prev, [`${gridX}-${gridY}`]: { color1, color2 } }));
   };
 
   const resetAll = () => {
