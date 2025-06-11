@@ -32,5 +32,13 @@ export const games: Game[] = [
     thumbnail: "/games/pusher/DamnPusher.png",
     buildUrl: "/games/pusher/index.html",
   },  
+  {
+    slug: "berto",
+    title: "Berto",
+    description: "A fun Unity WebGL game demo.",
+    tags: ["Unity", "WebGL", "Demo"],
+    thumbnail: "/games/berto/berto.jpg",
+    buildUrl: "/games/berto/index.html",
+  },  
   // Add more games here
 ]; 
