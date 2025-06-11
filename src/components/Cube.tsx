@@ -1,7 +1,7 @@
 "use client";
 import { Text } from "@react-three/drei";
 import { ThreeEvent } from "@react-three/fiber";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState } from "react";
 import * as THREE from "three";
 import { CUBE_SIZE, FloatingLabel } from "./ThreeBackground";
 
@@ -23,8 +23,8 @@ export function Cube({
   const meshRef = useRef<THREE.Mesh>(null);
   const [isHovered, setIsHovered] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
-  const [isTextVisible, setIsTextVisible] = useState(false);
-  const [text, setText] = useState("G");
+  // const [isTextVisible, setIsTextVisible] = useState(false);
+  // const [text, setText] = useState("G");
 
   const handlePointerOver = (event: ThreeEvent<PointerEvent>) => {
     event.stopPropagation();
@@ -82,7 +82,7 @@ export function Cube({
         metalness={0.8}
         roughness={0.2}
         transparent />
-      {isTextVisible && <Text
+      {/* {isTextVisible && <Text
         position={[0, 0, CUBE_SIZE / 2 + 0.01]} // Slightly in front of the face
         rotation={[0, 0, 0]}
         fontSize={CUBE_SIZE * 0.3}
@@ -90,8 +90,8 @@ export function Cube({
         anchorX="center"
         anchorY="middle"
       >
-        {text}
-      </Text>}
+        
+      </Text>} */}
       <FloatingLabel isVisible={isHovered} x={gridX} y={gridY} />
     </mesh>
   );

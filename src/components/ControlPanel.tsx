@@ -146,22 +146,6 @@ export default function ControlPanel({
     setCameraFov(parseFloat(e.target.value));
   };
 
-  function lerpColor(color1: string, color2: string, t: number) {
-    // lerp between hex colors
-    const r1 = parseInt(color1.slice(1, 3), 16);
-    const g1 = parseInt(color1.slice(3, 5), 16);
-    const b1 = parseInt(color1.slice(5, 7), 16);
-
-    const r2 = parseInt(color2.slice(1, 3), 16);
-    const g2 = parseInt(color2.slice(3, 5), 16);
-    const b2 = parseInt(color2.slice(5, 7), 16);
-    const r = Math.round(r1 + (r2 - r1) * t);
-    const g = Math.round(g1 + (g2 - g1) * t);
-    const b = Math.round(b1 + (b2 - b1) * t);
-
-    const toHex = (n: number) => n.toString(16).padStart(2, '0');
-    return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
-  }
 
   const group = useRef(new Tween.Group());
 
@@ -217,7 +201,6 @@ export default function ControlPanel({
   }
 
   const floodFill = (x: number, y: number, color1: string, color2: string) => {
-    const selectedKey = `${x}-${y}`;
     const visited = new Set<string>();
     const queue: [number, number][] = [[x, y]];
     while (queue.length > 0) {
