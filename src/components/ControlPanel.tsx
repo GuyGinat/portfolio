@@ -3,6 +3,8 @@ import { GRID_SIZE_X, GRID_SIZE_Y } from './ThreeBackground';
 import Tween from '@tweenjs/tween.js';
 import { useColorTween } from '../hooks/useColorTween';
 import { tinyFont } from '@/data/tinyFont';
+import { usePathname } from 'next/navigation';
+import { BackgroundConfig, backgroundConfigMaps, useTweenBackgroundConfig } from '@/data/backgroundConfig';
 
 interface ControlPanelProps {
   onColor1Change: (color: string) => void;
@@ -66,6 +68,67 @@ function useDragNumber(value: number, setValue: (v: number) => void, step = 0.1)
 
 type TabType = 'colors' | 'wave' | 'camera' | 'light';
 
+// Add this custom hook at the top level of the file, before the ControlPanel component
+function useBackgroundTween() {
+  const [isTweening, setIsTweening] = useState(false);
+  const requestRef = useRef<number>();
+  const startTimeRef = useRef<number>();
+
+  const tweenConfig = (
+    from: BackgroundConfig,
+    to: BackgroundConfig,
+    duration: number,
+    onUpdate: (value: BackgroundConfig) => void,
+    onComplete?: () => void
+  ) => {
+    setIsTweening(true);
+    const startTime = performance.now();
+
+    const animate = (time: number) => {
+      const elapsed = time - startTime;
+      const t = Math.min(elapsed / duration, 1);
+
+      const lerp = (a: number, b: number) => a + (b - a) * t;
+      const lerpVec3 = (a: [number, number, number], b: [number, number, number]) =>
+        [0, 1, 2].map(i => lerp(a[i], b[i])) as [number, number, number];
+
+      const result: BackgroundConfig = {
+        color1: from.color1,
+        color2: from.color2,
+        lightPosition: lerpVec3(from.lightPosition, to.lightPosition),
+        waveAmplitude: lerp(from.waveAmplitude, to.waveAmplitude),
+        waveFrequency: lerp(from.waveFrequency, to.waveFrequency),
+        waveSpeed: lerp(from.waveSpeed, to.waveSpeed),
+        cameraPosition: lerpVec3(from.cameraPosition, to.cameraPosition),
+        cameraFov: lerp(from.cameraFov, to.cameraFov),
+        spacingOffset: lerp(from.spacingOffset, to.spacingOffset),
+        customColorsMap: from.customColorsMap
+      };
+
+      onUpdate(result);
+
+      if (t < 1) {
+        requestRef.current = requestAnimationFrame(animate);
+      } else {
+        setIsTweening(false);
+        onComplete?.();
+      }
+    };
+
+    requestRef.current = requestAnimationFrame(animate);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (requestRef.current) {
+        cancelAnimationFrame(requestRef.current);
+      }
+    };
+  }, []);
+
+  return { tweenConfig, isTweening };
+}
+
 export default function ControlPanel({
   onColor1Change,
   onColor2Change,
@@ -107,6 +170,18 @@ export default function ControlPanel({
   const [fullLerpColor2, setFullLerpColor2] = useState("#cccccc");
   const [activeTab, setActiveTab] = useState<TabType>('colors');
   const { tweenCubeColors } = useColorTween();
+  const pathname = usePathname();
+  const [currentConfig, setCurrentConfig] = useState<BackgroundConfig>(backgroundConfigMaps["default"]);
+  const { tweenConfig } = useBackgroundTween();
+
+  useEffect(() => {
+    console.log(pathname);
+    const config = backgroundConfigMaps[pathname.slice(1)] || backgroundConfigMaps["default"] ;
+    if (config) {
+      lerpAllCubesToColors(config.color1, config.color2);
+      setBackgroundConfig(config);
+    }
+  }, [pathname]);
 
   // Drag controls for camera
   const camX = useDragNumber(cameraPosition[0], v => setCameraPosition([v, cameraPosition[1], cameraPosition[2]]));
@@ -146,6 +221,21 @@ export default function ControlPanel({
     setCameraFov(parseFloat(e.target.value));
   };
 
+  const setBackgroundConfig = (config: BackgroundConfig) => {
+    tweenConfig(currentConfig, config, 1000, (newConfig) => {      
+      setLight(newConfig.lightPosition);
+      setSpacingOffset(newConfig.spacingOffset);
+      setWaveAmplitude(newConfig.waveAmplitude);
+      setWaveFrequency(newConfig.waveFrequency);
+      setWaveSpeed(newConfig.waveSpeed);
+      setCameraPosition(newConfig.cameraPosition);
+      setCameraFov(newConfig.cameraFov);
+    }, () => {
+      setCurrentConfig(config);
+    });
+  };
+  
+
 
   const group = useRef(new Tween.Group());
 
@@ -177,6 +267,16 @@ export default function ControlPanel({
       for (let y = 0; y < GRID_SIZE_Y; y++) {
         setTimeout(() => {
           lerpCubeColors(x, y, fullLerpColor1, fullLerpColor2);
+        }, 100 * x);
+      }
+    }
+  }
+
+  const lerpAllCubesToColors = (color1: string, color2: string) => {
+    for (let x = 0; x < GRID_SIZE_X; x++) {
+      for (let y = 0; y < GRID_SIZE_Y; y++) {
+        setTimeout(() => {
+          lerpCubeColors(x, y, color1, color2);
         }, 100 * x);
       }
     }

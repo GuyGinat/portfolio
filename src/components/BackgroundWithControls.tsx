@@ -1,5 +1,6 @@
 "use client";
 import { useState, ReactNode } from "react";
+import { useRouter } from "next/navigation";
 import ThreeBackground from "./ThreeBackground";
 import ControlPanel from "./ControlPanel";
 import Link from "next/link";
@@ -23,7 +24,7 @@ export default function BackgroundWithControls({ children }: { children: ReactNo
   const [waveSpeed, setWaveSpeed] = useState(DEFAULT_WAVE_SPEED);
   const [cameraPosition, setCameraPosition] = useState<[number, number, number]>(DEFAULT_CAMERA_POSITION);
   const [cameraFov, setCameraFov] = useState(DEFAULT_CAMERA_FOV);
-  const [showMain, setShowMainState] = useState(true);
+  const [showMain, setShowMainState] = useState(false);
   const [spacingOffset, setSpacingOffset] = useState(DEFAULT_SPACING_OFFSET);
   const [customCubeColors, setCustomCubeColors] = useState<{ [key: string]: { color1: string; color2: string } }>({});
 
@@ -48,6 +49,8 @@ export default function BackgroundWithControls({ children }: { children: ReactNo
     setSpacingOffset(DEFAULT_SPACING_OFFSET);
     setCustomCubeColors({});
   };
+
+
 
   return (
     <>
@@ -89,7 +92,7 @@ export default function BackgroundWithControls({ children }: { children: ReactNo
         resetAll={resetAll}
       />
       {showMain && (
-      <nav className="fixed top-0 w-full backdrop-blur-sm border-b border-gray-200/20 z-50">
+      <nav className="fixed top-0 w-full backdrop-blur-sm border-b border-gray-200/20 z-50 opacity-90">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16 items-center">
             <Link href="/" className="text-xl font-bold text-indigo-600">Guy Ginat</Link>
