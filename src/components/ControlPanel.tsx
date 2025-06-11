@@ -4,7 +4,7 @@ import Tween from '@tweenjs/tween.js';
 import { useColorTween } from '../hooks/useColorTween';
 import { tinyFont } from '@/data/tinyFont';
 import { usePathname } from 'next/navigation';
-import { BackgroundConfig, backgroundConfigMaps, useTweenBackgroundConfig } from '@/data/backgroundConfig';
+import { BackgroundConfig, backgroundConfigMaps } from '@/data/backgroundConfig';
 
 interface ControlPanelProps {
   onColor1Change: (color: string) => void;
