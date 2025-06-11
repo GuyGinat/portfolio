@@ -35,11 +35,13 @@ function useDragNumber(value: number, setValue: (v: number) => void, step = 0.1)
   const ref = useRef<HTMLDivElement>(null);
   const startValue = useRef(0);
 
-  const onMouseDown = (e: React.MouseEvent) => {
+  const onMouseDown = () => {
     startValue.current = value;
     // Request pointer lock for infinite dragging
     if (ref.current) {
-      ref.current.requestPointerLock = ref.current.requestPointerLock || (ref.current as any).mozRequestPointerLock || (ref.current as any).webkitRequestPointerLock;
+      ref.current.requestPointerLock = ref.current.requestPointerLock || 
+        (ref.current as unknown as { mozRequestPointerLock?: () => void }).mozRequestPointerLock || 
+        (ref.current as unknown as { webkitRequestPointerLock?: () => void }).webkitRequestPointerLock;
       if (ref.current.requestPointerLock) ref.current.requestPointerLock();
     }
     document.body.style.cursor = 'ew-resize';

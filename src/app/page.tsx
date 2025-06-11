@@ -10,7 +10,7 @@ export default function Home() {
             Technical Game Designer & Other Stuff
           </h1>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Hello!<br/> I'm Guy Ginat, a technical game designer. I love making games, tools, web apps, and sometimes, I also make some music.
+            Hello!<br/> I&apos;m Guy Ginat, a technical game designer. I love making games, tools, web apps, and sometimes, I also make some music.
           </p>
         </section>
 

@@ -38,7 +38,7 @@ export default function AboutPage() {
       <div className="container-custom py-12">
         <h1 className="section-title">About Me</h1>
         <p className="mb-10 text-lg text-gray-700 max-w-2xl">
-          Here's a timeline of my journey with games—both playing and making them. Hover over each year to see more!
+          Here&apos;s a timeline of my journey with games—both playing and making them. Hover over each year to see more!
         </p>
         <div className="relative flex flex-col items-center">
           {/* Timeline line (animated width) */}

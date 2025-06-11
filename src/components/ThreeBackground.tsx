@@ -1,6 +1,6 @@
 "use client";
 import { Canvas, useThree } from "@react-three/fiber";
-import { OrbitControls, Environment, Html } from "@react-three/drei";
+import { Html } from "@react-three/drei";
 import { Suspense, useEffect } from "react";
 import { CubeGrid } from "./CubeGrid";
 import { PerspectiveCamera } from "three";
