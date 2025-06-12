@@ -17,6 +17,7 @@ export function CubeGrid({
   const [time, setTime] = useState(0);
 
   useEffect(() => {
+    console.log("parameters changed");
     let animationFrameId: number;
     const animate = () => {
       setTime(prev => prev + waveSpeed * 0.01);
@@ -28,9 +29,7 @@ export function CubeGrid({
         cancelAnimationFrame(animationFrameId);
       }
     };
-  }, [waveSpeed]);
-
-
+  }, [waveSpeed, waveAmplitude, waveFrequency]);
 
   const cubes = [];
   const cubeMap: React.ReactElement[][] = [];

@@ -9,7 +9,8 @@ export function useTween(
   to: number,
   duration: number,
   onUpdate: (value: number) => void,
-  easing: EasingFunction = linear
+  easing: EasingFunction = linear,
+  onComplete?: () => void
 ) {
   const requestRef = useRef<number>();
   const startTimeRef = useRef<number>();
@@ -25,6 +26,8 @@ export function useTween(
 
       if (t < 1) {
         requestRef.current = requestAnimationFrame(animate);
+      } else {
+        onComplete?.();
       }
     };
 
