@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, forwardRef, useImperativeHandle } from 'react';
 import { GRID_SIZE_X, GRID_SIZE_Y } from './ThreeBackground';
 import Tween from '@tweenjs/tween.js';
 import { useColorTween } from '../hooks/useColorTween';
@@ -9,10 +9,7 @@ import { BackgroundConfig, backgroundConfigMaps } from '@/data/backgroundConfig'
 interface ControlPanelProps {
   onColor1Change: (color: string) => void;
   onColor2Change: (color: string) => void;
-  onLightPositionChange: (position: [number, number, number]) => void;
-  onWaveAmplitudeChange: (value: number) => void;
-  onWaveFrequencyChange: (value: number) => void;
-  onWaveSpeedChange: (value: number) => void;
+  onLightPositionChange: (position: [number, number, number]) => void;  
   initialColor1: string;
   initialColor2: string;
   initialLightPosition: [number, number, number];
@@ -30,6 +27,15 @@ interface ControlPanelProps {
   customCubeColors: { [key: string]: { color1: string; color2: string } };
   setCustomCubeColor: (gridX: number, gridY: number, color1: string, color2: string) => void;
   resetAll: () => void;
+  currentConfig: BackgroundConfig;
+  nextConfig: BackgroundConfig;
+  setCurrentConfig: (config: BackgroundConfig) => void;
+  waveAmplitude: number;
+  setWaveAmplitude: (value: number) => void;
+  waveFrequency: number;
+  setWaveFrequency: (value: number) => void;
+  waveSpeed: number;
+  setWaveSpeed: (value: number) => void;
 }
 
 // Helper for drag-to-change
@@ -102,7 +108,9 @@ function useBackgroundTween() {
         cameraPosition: lerpVec3(from.cameraPosition, to.cameraPosition),
         cameraFov: lerp(from.cameraFov, to.cameraFov),
         spacingOffset: lerp(from.spacingOffset, to.spacingOffset),
-        customColorsMap: from.customColorsMap
+        customColorsMap: from.customColorsMap,
+        delayType: to.delayType,
+        delay: to.delay
       };
 
       onUpdate(result);
@@ -129,19 +137,13 @@ function useBackgroundTween() {
   return { tweenConfig, isTweening };
 }
 
-export default function ControlPanel({
+function ControlPanel({
   onColor1Change,
   onColor2Change,
-  onLightPositionChange,
-  onWaveAmplitudeChange,
-  onWaveFrequencyChange,
-  onWaveSpeedChange,
+  onLightPositionChange,  
   initialColor1,
   initialColor2,
-  initialLightPosition,
-  initialWaveAmplitude,
-  initialWaveFrequency,
-  initialWaveSpeed,
+  initialLightPosition,  
   cameraPosition,
   setCameraPosition,
   cameraFov,
@@ -153,35 +155,43 @@ export default function ControlPanel({
   customCubeColors,
   setCustomCubeColor,
   resetAll,
-}: ControlPanelProps) {
+  currentConfig,
+  nextConfig,
+  setCurrentConfig,
+  waveAmplitude,
+  setWaveAmplitude,
+  waveFrequency,
+  setWaveFrequency,
+  waveSpeed,
+  setWaveSpeed,
+}: ControlPanelProps, ref: React.Ref<{ writeText: (text: string, x: number, y: number, c1: string, c2: string) => void }>) {
   const [isOpen, setIsOpen] = useState(false);
   const [color1, setColor1] = useState(initialColor1);
   const [color2, setColor2] = useState(initialColor2);
-  const [light, setLight] = useState<[number, number, number]>(initialLightPosition);
-  const [waveAmplitude, setWaveAmplitude] = useState(initialWaveAmplitude);
-  const [waveFrequency, setWaveFrequency] = useState(initialWaveFrequency);
-  const [waveSpeed, setWaveSpeed] = useState(initialWaveSpeed);
+  const [light, setLight] = useState<[number, number, number]>(initialLightPosition);  
   const [selectedGridX, setSelectedGridX] = useState(0);
   const [selectedGridY, setSelectedGridY] = useState(0);
   const selectedKey = `${selectedGridX}-${selectedGridY}`;
-  const selectedColor1 = customCubeColors[selectedKey]?.color1 || "#ffffff";
-  const selectedColor2 = customCubeColors[selectedKey]?.color2 || "#ffffff";
-  const [fullLerpColor1, setFullLerpColor1] = useState("#ffffff");
-  const [fullLerpColor2, setFullLerpColor2] = useState("#cccccc");
+  const selectedColor1 = customCubeColors[selectedKey]?.color1 || "#eeeeee";
+  const selectedColor2 = customCubeColors[selectedKey]?.color2 || "#eeeeee";
+  const [fullLerpColor1, setFullLerpColor1] = useState("#eeeeee");
+  const [fullLerpColor2, setFullLerpColor2] = useState("#eeeeee");
   const [activeTab, setActiveTab] = useState<TabType>('colors');
   const { tweenCubeColors } = useColorTween();
-  const pathname = usePathname();
-  const [currentConfig, setCurrentConfig] = useState<BackgroundConfig>(backgroundConfigMaps["default"]);
+  const pathname = usePathname();  
   const { tweenConfig } = useBackgroundTween();
 
   useEffect(() => {
     console.log(pathname);
     const config = backgroundConfigMaps[pathname.slice(1)] || backgroundConfigMaps["default"] ;
     if (config) {
-      lerpAllCubesToColors(config.color1, config.color2);
       setBackgroundConfig(config);
     }
   }, [pathname]);
+
+  useEffect(() => {
+    setBackgroundConfig(nextConfig);
+  }, [nextConfig]);
 
   // Drag controls for camera
   const camX = useDragNumber(cameraPosition[0], v => setCameraPosition([v, cameraPosition[1], cameraPosition[2]]));
@@ -205,23 +215,23 @@ export default function ControlPanel({
   const handleWaveAmplitudeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseFloat(e.target.value);
     setWaveAmplitude(value);
-    onWaveAmplitudeChange(value);
   };
   const handleWaveFrequencyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseFloat(e.target.value);
     setWaveFrequency(value);
-    onWaveFrequencyChange(value);
+    console.log("waveFrequency changed", value);
   };
   const handleWaveSpeedChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseFloat(e.target.value);
     setWaveSpeed(value);
-    onWaveSpeedChange(value);
   };
   const handleCameraFov = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCameraFov(parseFloat(e.target.value));
   };
 
   const setBackgroundConfig = (config: BackgroundConfig) => {
+    if (config === currentConfig) return;
+    lerpAllCubesToColors(config.color1, config.color2, config.delay || 100, config.delayType || "rtl");
     tweenConfig(currentConfig, config, 1000, (newConfig) => {      
       setLight(newConfig.lightPosition);
       setSpacingOffset(newConfig.spacingOffset);
@@ -272,33 +282,54 @@ export default function ControlPanel({
     }
   }
 
-  const lerpAllCubesToColors = (color1: string, color2: string) => {
+  type delayType = "rtl" | "ltr" | "utd" | "dtu" | "cto" | "otc";
+  const delayTypeToDirection = (delayType: delayType, x: number, y: number) => {
+    const centerX = GRID_SIZE_X / 2;
+    const centerY = GRID_SIZE_Y / 2;
+    switch (delayType) {
+      case "rtl": return x;
+      case "ltr": return GRID_SIZE_X - 1 - x;
+      case "utd": return GRID_SIZE_Y - 1 - y;
+      case "dtu": return y;      
+      case "cto":
+        return Math.abs(x - centerX) + Math.abs(y - centerY);  
+      case "otc":
+        const maxDist = centerX + centerY;
+        return maxDist - (Math.abs(x - centerX) + Math.abs(y - centerY));
+    }
+  }
+
+  const lerpAllCubesToColors = (color1: string, color2: string, delay: number = 100, delayType: delayType = "cto") => {
     for (let x = 0; x < GRID_SIZE_X; x++) {
       for (let y = 0; y < GRID_SIZE_Y; y++) {
         setTimeout(() => {
           lerpCubeColors(x, y, color1, color2);
-        }, 100 * x);
+        }, delay * delayTypeToDirection(delayType, x, y));
       }
     }
   }
 
-  const writeLetter = (char: string, x: number, y: number) => {
+  const writeLetter = (char: string, x: number, y: number, c1: string, c2: string) => {
     const rows = tinyFont[char.toUpperCase()];
     if (!rows) return;
     rows.forEach((row, rowIndex) => {
       for (let col = 0; col < 3; col++) {
         if ((row >> (2 - col)) & 1) {
-          lerpCubeColors(x + col, GRID_SIZE_Y - 1 - rowIndex - y, fullLerpColor1, fullLerpColor2);
+          lerpCubeColors(x + col, GRID_SIZE_Y - 1 - rowIndex - y, c1, c2);
         }
       }
     });
   }
 
-  const writeText = (text: string, x: number, y: number) => {
+  const writeText = (text: string, x: number, y: number, c1: string, c2: string) => {
     for (let i = 0; i < text.length; i++) {
-      writeLetter(text[i], x + i * 4, y);
+      writeLetter(text[i], x + i * 4, y, c1, c2);
     }
   }
+
+  useImperativeHandle(ref, () => ({    
+    writeText: (text: string, x: number, y: number, c1: string = fullLerpColor1, c2: string = fullLerpColor2) => writeText(text, x, y, c1, c2),
+  }));
 
   const floodFill = (x: number, y: number, color1: string, color2: string) => {
     const visited = new Set<string>();
@@ -374,7 +405,7 @@ export default function ControlPanel({
               <button onClick={() => floodFillTest()} className="w-full bg-black/30 text-white px-1">Flood Fill</button>
             </div>
             <div>
-              <button onClick={() => writeText("what", 1, 1)} className="w-full bg-black/30 text-white px-1">Write Text</button>
+              <button onClick={() => writeText("what", 1, 1, "#000000", "#ffffff")} className="w-full bg-black/30 text-white px-1">Write Text</button>
             </div>
           </>
         );
@@ -582,3 +613,5 @@ export default function ControlPanel({
     </div>
   );
 } 
+
+export default forwardRef(ControlPanel);
