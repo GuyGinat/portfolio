@@ -1,6 +1,5 @@
 "use client";
 import { useState, useEffect, useRef, ReactNode } from "react";
-import { useRouter } from "next/navigation";
 import ThreeBackground from "./ThreeBackground";
 import ControlPanel from "./ControlPanel";
 import Link from "next/link";
@@ -54,6 +53,7 @@ export default function BackgroundWithControls({ children }: { children: ReactNo
   const [currentConfig, setCurrentConfig] = useState<BackgroundConfig>(backgroundConfigMaps["start"]);
   const [nextConfig, setNextConfig] = useState<BackgroundConfig>(backgroundConfigMaps["start"]);
   const [opacity, setOpacity] = useState(0);
+  const [finishedIntro, setFinishedIntro] = useState(false);
 
   const handleShowMain = (show: boolean) => {    
     setShowMainState(show);
@@ -91,40 +91,49 @@ export default function BackgroundWithControls({ children }: { children: ReactNo
   const writeTextRef = useRef<{ writeText: (text: string, x: number, y: number, c1: string, c2: string) => void }>(null);
 
   useEffect(() => {
-    screenLoadSequence();
+    const hasVisited = localStorage.getItem('hasVisited');
+    
+    if (!hasVisited) {
+      screenLoadSequence();
+      localStorage.setItem('hasVisited', 'true');
+    } else {
+      showMainTween();
+      // setNextConfig(backgroundConfigMaps["base"]);
+      setFinishedIntro(true);
+    }
 
     function screenLoadSequence() {
-      setTimeout(() => {        
+      setTimeout(() => {
         writeTextRef.current?.writeText("Hey!", 2, 2, "#aaaaaa", "#111111");
       }, 3000);
-
-      setTimeout(() => {        
+      setTimeout(() => {
         setNextConfig(backgroundConfigMaps["purple"]);        
       }, 7000);
-      setTimeout(() => {        
+      setTimeout(() => {
         writeTextRef.current?.writeText("My Name", 2, 2, "#dddddd", "#ffffff");
         writeTextRef.current?.writeText("Is Guy", 2, 9, "#dddddd", "#ffffff");
       }, 11000);
-      setTimeout(() => {        
+      setTimeout(() => {
         setNextConfig(backgroundConfigMaps["beach"]);        
       }, 15000);
-      setTimeout(() => {        
+      setTimeout(() => {
         writeTextRef.current?.writeText("I Make", 2, 2, "#777777", "#111111");
         writeTextRef.current?.writeText("Games", 2, 9, "#777777", "#111111");
       }, 19000);
-      setTimeout(() => {        
-        setNextConfig(backgroundConfigMaps["games"]);        
+      setTimeout(() => {
+        setNextConfig(backgroundConfigMaps["games2"]);        
       }, 23000);
-      setTimeout(() => {        
+      setTimeout(() => {
         writeTextRef.current?.writeText("+ More", 2, 2, "#dddddd", "#ffffff");
         writeTextRef.current?.writeText("Stuff", 2, 9, "#dddddd", "#ffffff");
       }, 27000);
-      setTimeout(() => {        
-        setNextConfig(backgroundConfigMaps["purple"]);        
+      setTimeout(() => {
+        setNextConfig(backgroundConfigMaps["base"]);
       }, 31000);
       // After all sequences are done, fade in the main content
       setTimeout(() => {
         showMainTween();
+        setFinishedIntro(true);
       }, 35000);
     }
   }, []);
@@ -174,6 +183,8 @@ export default function BackgroundWithControls({ children }: { children: ReactNo
         waveSpeed={waveSpeed}
         setWaveSpeed={setWaveSpeed}
         ref={writeTextRef}
+        finishedIntro={finishedIntro}
+        setFinishedIntro={setFinishedIntro}
       />
       {showMain && (
         <nav className="fixed top-0 w-full backdrop-blur-sm border-b border-gray-200/20 z-50" style={{ opacity: opacity / 100 }}>

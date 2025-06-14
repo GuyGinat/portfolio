@@ -1,9 +1,12 @@
 import { games } from "@/data/games";
 import { notFound } from "next/navigation";
 import Image from "next/image";
+import { ContentBlock } from "@/components/ContentBlock";
 
 type GamePageProps = {
-  params: { slug: string };
+  params: {
+    slug: string;
+  };
 };
 
 export default function GamePage({ params }: GamePageProps) {
@@ -37,6 +40,15 @@ export default function GamePage({ params }: GamePageProps) {
         height={180}
         className="rounded shadow-md mb-4"
       />
+
+      {/* Content Blocks Section */}
+      {game.content && game.content.length > 0 && (
+        <div className="w-full max-w-4xl mt-12 space-y-8">
+          {game.content.map((block, index) => (
+            <ContentBlock key={index} block={block} />
+          ))}
+        </div>
+      )}
     </div>
   );
 } 

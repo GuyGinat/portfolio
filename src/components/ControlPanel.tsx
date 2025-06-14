@@ -36,6 +36,8 @@ interface ControlPanelProps {
   setWaveFrequency: (value: number) => void;
   waveSpeed: number;
   setWaveSpeed: (value: number) => void;
+  finishedIntro: boolean;
+  setFinishedIntro: (value: boolean) => void;
 }
 
 // Helper for drag-to-change
@@ -164,6 +166,8 @@ function ControlPanel({
   setWaveFrequency,
   waveSpeed,
   setWaveSpeed,
+  finishedIntro,
+  setFinishedIntro,
 }: ControlPanelProps, ref: React.Ref<{ writeText: (text: string, x: number, y: number, c1: string, c2: string) => void }>) {
   const [isOpen, setIsOpen] = useState(false);
   const [color1, setColor1] = useState(initialColor1);
@@ -182,8 +186,8 @@ function ControlPanel({
   const { tweenConfig } = useBackgroundTween();
 
   useEffect(() => {
-    console.log(pathname);
-    const config = backgroundConfigMaps[pathname.slice(1)] || backgroundConfigMaps["default"] ;
+    
+    const config = backgroundConfigMaps[pathname.slice(1)] || (finishedIntro ? backgroundConfigMaps["base"] : backgroundConfigMaps["default"]);
     if (config) {
       setBackgroundConfig(config);
     }

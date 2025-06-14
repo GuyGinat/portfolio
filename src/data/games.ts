@@ -1,3 +1,5 @@
+import { ContentBlock } from '@/types/content';
+
 export type Game = {
   slug: string;
   title: string;
@@ -5,6 +7,7 @@ export type Game = {
   tags: string[];
   thumbnail: string;
   buildUrl: string;
+  content?: ContentBlock[];  // Optional array of content blocks
 };
 
 export const games: Game[] = [
@@ -15,6 +18,18 @@ export const games: Game[] = [
     tags: ["Unity", "WebGL", "Demo"],
     thumbnail: "/games/spinning-roles/thumb.jpg",
     buildUrl: "/games/spinning-roles/index.html",
+    content: [
+      {
+        type: "text",
+        content: "Description of the game and its development process."
+      },
+      {
+        type: "image",
+        content: "",  // Empty string for image type
+        url: "/games/spinning-roles/screenshot1.jpg",
+        alt: "Gameplay screenshot"
+      }
+    ]
   },  
   {
     slug: "jjj",
@@ -29,7 +44,7 @@ export const games: Game[] = [
     title: "Pusher",
     description: "A fun Unity WebGL game demo.",
     tags: ["Unity", "WebGL", "Demo"],
-    thumbnail: "/games/pusher/DamnPusher.png",
+    thumbnail: "/games/pusher/Pusher.png",
     buildUrl: "/games/pusher/index.html",
   },  
   {
