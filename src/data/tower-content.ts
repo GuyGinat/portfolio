@@ -4,11 +4,11 @@ export const towerContent: ContentBlock[] = [
   {
     type: 'text',
     title: 'Introduction',
-    content: "For a long time I have been infatuated with systemic games, as a kid I played mostly games that were focused on systems, more then just systems, I really like grids. They seem to fit very well with games as they offer a set of constraints by default, proximity and distance is a discrete singular number, rows and columns have unique relationships between each other and within themselves that doesn't exist in a continuous space and they offer tactility that lands itself well to turn based game design."
+    content: "For a long time I have been infatuated with systemic games, as a kid I played mostly games that were focused on systems, more then just systems, I really like grids (as you have may have noticed from this website). They seem to fit very well with games as they offer a set of constraints by default, proximity and distance are discrete singular numbers, rows and columns have a unique relationship between each other and within themselves that doesn't exist in a continuous space and they offer tactility that lands itself well to turn based game design."
   },
   {
     type: 'text',
-    content: ' When I started making games I was drawn into making grid based games (some of them you can play here!), after making a couple I wanted to mix things up, the thought was \"lets try and make a grid, but circle!\" and of we were to the races, resulting in this:'
+    content: ' When I started making games I was drawn into making grid based games (some of them you can play here!), after making a couple I wanted to mix things up, the thought was \"lets try and make a grid, but circle!\" and off we were to the races, resulting in this:'
   },
   {
     type: 'image',
@@ -20,14 +20,25 @@ export const towerContent: ContentBlock[] = [
   },
   {
     type: 'text',
-    content: "No game yet, just a radial grid, and the start of my maddening trip over finding what is interesting about this thing. So lets take a look at the first game I tried to make with this system."
-  },  
+    content: "No game yet, just a radial grid, or more accurately a way to create radial grids, by defining how many rings and how many segments each ring has, functionalities to rotate rings and push / pull segments, place walls between them and a bunch of other things.\n\nAnd, the start of my maddening trip over finding what is interesting about this thing. So lets take a look at some of the games I tried to make with this system."
+  },
+  {
+    type: 'text',
+    content: "A small note before we start, I highly recommend playing the games in full screen, on a pc (phone is not supported). Also, some of these games have sound, some don't, and! they are prototypes, so they are not perfect, but they are fun to play and I hope you enjoy them.",
+    style: {
+      marginBottom: 100,
+      backgroundColor: '#552222',
+      textColor: 'white',
+      borderRadius: 10,
+      padding: 15,
+    }
+  },
   {
     title: 'Rogue',
     type: 'text',
     content: "Welcome to our first attempt at a game.The thought was to make this strategic game where you have to collect a key (which is represented by a green sphere) and then reach some exit, it is mostly inspired by the original Rogue game."
   },
-  
+
   {
     type: 'image',
     url: '/images/tower/rogue.jpg',
@@ -35,7 +46,7 @@ export const towerContent: ContentBlock[] = [
     minHeight: 200,
     sideBySide: true,
     referenceText: 'Rogue, 1980, developed by A.I. Design'
-  },  
+  },
   {
     type: 'text',
     content: "If you click on the Generate Random Level button you will get a random configuration of walls enemies and keys. This project was abandoned pretty fast, there were a bit too many other ideas flowing through my mind when I started this and I wanted to get it right on first try for some reason. But the core of the radial grid system is there and looks kinda cool, it has walls, rotating rings, and things moving on it."
@@ -73,11 +84,12 @@ export const towerContent: ContentBlock[] = [
     content: "Grids by nature are very tactile, and strategic, when you think about  the previous 2 games that I showed you, they pretty much all have this slow paced play by play gameplay loop to them.\nI got frustrated that all the games I have been attempting were slow paced and took place on the grid, so I wanted to take a different direction, an action game that uses the grid as a supporting system rather then the actual game.\nSo here you move around trying not to die by hitting these red triangles, the grid controls which of your items get activated, helping you take out the triangles on a steady rhythm, whenever you take out enough enemies you get to choose a new item to place on your grid."
   },
   {
-    type: 'image',
-    url: '/images/tower/tower.png',
+    type: 'build',
+    url: '/games/tower/Action/index.html',
     alt: 'Tower',
     minHeight: 500,
-    referenceText: 'This is where Action build goes'
+    minWidth: 200,
+    referenceText: 'Action Game'
   },
   {
     type: 'text',
@@ -92,7 +104,7 @@ export const towerContent: ContentBlock[] = [
   {
     type: 'video',
     url: '/videos/musicPrototype.mp4',
-    alt: 'Music',    
+    alt: 'Music',
     minHeight: 300,
     minWidth: 400,
     referenceText: 'Song is "Out of the Black" by Royal Blood'
@@ -112,18 +124,18 @@ export const towerContent: ContentBlock[] = [
   {
     type: 'text',
     content: "You probably noticed by this point that it is pretty janky, and so early into developing a game I found myself putting out fires everywhere in my code. I had this notion in mind that when it will be the right game it will be easy. I wanted this game to be that, but it was not, it was complicated and messy and I was not having funSo I just decided to move on, make something else.\nWhat do you think?"
-  },  
+  },
   {
     title: 'Tetris',
     type: 'text',
     content: "Welcome to Tetris!\nSo as you can see by now I was working on several different projects while trying to figure out what is this system made for. At some point I was so tired of forcing myself to come up with some brand new brilliant idea with groundbreaking game design, so I just wanted to make a game that already exists. This has been, to my surprise, a very fun project to work on, other than just playing Tetris which is a pretty amazing game, following the blueprint of the original design and just implementing it in my system was an extremely fun experience, maybe I'll just make more clones with my system, we can do breakout, and minesweeper, maybe pacman, and all the other classics."
   },
   {
-    type: 'image',
-    url: '/images/tower/tower.png',
+    type: 'build',
+    url: '/games/tower/Tetris/index.html',
     alt: 'Tower',
-    minHeight: 500,
-    referenceText: 'This is where Tetris build goes'
+    minHeight: 700,
+    referenceText: 'Tetris'
   },
   {
     title: 'Small Engine',
@@ -131,26 +143,100 @@ export const towerContent: ContentBlock[] = [
     content: "I was so frustrated from not finding the right game that I just thought about handing it out to other people. Pack everything up in a tool and let somebody else make the \"killer app\" with it, fuck it, why not?\nI mean there are a bunch of cool little game engines that are very specific and niche out there, this can be another one, I like the tool itself, you can move around if you hit the \"Tab\" button, place objects on the grid and move them. I wanted to add a rule making system so that you can actually make a game on this but never got around to it. What do you think? Would you give this away to someone else? Your own system that you have worked on for over a year just so somebody else can be the \"one that made that cool game on a new system\"."
   },
   {
-    type: 'image',
-    url: '/images/tower/tower.png',
+    type: 'build',
+    url: '/games/tower/CreationTool/index.html',
     alt: 'Tower',
-    minHeight: 500,
-    referenceText: 'This is where Small Engine build goes'
+    minHeight: 800,
+    referenceText: 'This is where Small Engine build goes',
+    style: {
+      marginBottom: 100,
+    }
   },
   {
     title: 'Other Experiments',
     type: 'text',
-    content: "After all of these I realized that I don't really have a strong urge to make something specific, but just mess around with the radial grid, so here are 2 other experiments I came up with to keep on researching how to make a radial grid game"
+    content: "After all of these I realized that I don't really have a strong urge to make something specific, but just mess around with the radial grid, so here are 2 other experiments I came up with to keep on researching how to make a radial grid game.",
+    style: {
+      marginBottom: 50,
+    }
   },
   {
     title: 'Physical Edition',
     type: 'text',
-    content: "Since I started working on this I really wanted to have a physical manifestation of the system I made, and since I already have the calculus of the system lodged into my brain so hard I knew how to bring this vision into life.\nUtilizing Adobe Illustrators scripting capabilities to generate a mathematically accurate definition of a radial grid.\nThen, Using a laser cutter I carved up a piece of wood to different rings so that you can physically rotate them one within the other, making a cool physical game board, I made a bunch of other little game pieces and this is the result."
+    sideBySide: true,
+    content: "Since I started working on this I really wanted to have a physical manifestation of the system I made, and since I already have the calculus of the system lodged into my brain so hard I knew how to bring this idea into life.\nUtilizing Adobe Illustrators scripting capabilities to generate a mathematically accurate definition of a radial grid.\nThen, Using a laser cutter I carved up a piece of wood to different rings so that you can physically rotate them one within the other, making a cool physical game board, I made a bunch of other little game pieces and this is the result.",
+    minWidth: 200,
+    style: {
+      flexBasis: '90%',
+    }
+  },
+  {
+    type: 'image',
+    url: '/images/tower/board.png',
+    alt: 'Board',
+    minHeight: 375,
+    minWidth: 450,
+  },
+  {
+    type: 'code',
+    codeFile: '/code/grid_generator.jsx',
+    language: 'javascript',
+    startLine: 1,
+    sideBySide: true,
+    endLine: 100,    
+    referenceText: 'grid_generator.jsx',
+    style: {
+      maxWidth: 500,
+    }
+  },
+  {
+    type: 'text',
+    content: "If you want to try and create your own physical radial grid game board you can modify this code and use it in Illustrator to generate the SVG file that you can then use to cut out the rings. If you just want the resulting file you can download it here. (there are also some basic playing pieces in the download)",
+    links: [
+      {
+        text: 'here',
+        url: '/downloads/RadialGridWithHoles.ai',
+        isDownload: true,
+        fileName: 'RadialGridWithHoles.ai'
+      }
+    ]
+  },  
+  {
+    type: 'text',
+    content: "I would add that there is no game for this yet, but! I am working on it, and I will be sure to update this page when I have something to show.",
+    style: {
+      marginTop: 1,
+      marginBottom: 100,
+    }
   },
   {
     title: 'Playdate for the Win',
     type: 'text',
-    content: "Since I started working on this I really wanted to have a physical manifestation of the system I made, and since I already have the calculus of the system lodged into my brain so hard I knew how to bring this vision into life.\nUtilizing Adobe Illustrators scripting capabilities to generate a mathematically accurate definition of a radial grid.\nThen, Using a laser cutter I carved up a piece of wood to different rings so that you can physically rotate them one within the other, making a cool physical game board, I made a bunch of other little game pieces and this is the result.Godamn I love this little thing, I got one a while back and I thought this would be an interesting way to go out of the Unity ecosystem and implement the radial grid on a different game engine, turned out to this cute little game where you use the crank to rotate the rings."
+    sideBySide: true,
+    content: "Since I started working on this I really wanted to have a physical manifestation of the system I made, and since I already have the calculus of the system lodged into my brain so hard I knew how to bring this vision into life.\nUtilizing Adobe Illustrators scripting capabilities to generate a mathematically accurate definition of a radial grid.",
+    style: {
+      marginBottom: 1,
+    }
+  },
+  {
+    type: 'image',
+    url: '/images/tower/BHVC.png',
+    alt: 'Black Hole Visitor Center',
+    minHeight: 175,
+    minWidth: 400,
+  },
+  {
+    type: 'image',
+    url: '/videos/playdate.gif',
+    alt: 'Black Hole Visitor Center',
+    minHeight: 300,
+    minWidth: 500,
+    maxHeight: 500,
+    maxWidth: 300,
+    style: {
+      marginTop: 0,
+      flexBasis: '10%',
+    }
   },
   {
     title: 'Forward',

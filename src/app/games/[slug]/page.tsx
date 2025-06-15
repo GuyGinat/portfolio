@@ -1,7 +1,9 @@
+"use client";
 import { games } from "@/data/games";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import { ContentBlock } from "@/components/ContentBlock";
+import { useState } from "react";
 
 type GamePageProps = {
   params: {
@@ -11,6 +13,8 @@ type GamePageProps = {
 
 export default function GamePage({ params }: GamePageProps) {
   const game = games.find((g) => g.slug === params.slug);
+  const [isGameLoaded, setIsGameLoaded] = useState(false);
+  
   if (!game) return notFound();
 
   return (
@@ -25,21 +29,32 @@ export default function GamePage({ params }: GamePageProps) {
         ))}
       </div>
       <div className="w-full max-w-6xl aspect-video bg-black rounded-lg overflow-hidden shadow-lg mb-6">
-        {/* Unity WebGL build iframe */}
-        <iframe
-          src={game.buildUrl}
-          title={game.title}
-          className="w-full h-full min-h-[400px]"
-          allowFullScreen
-        />
+        {!isGameLoaded ? (
+          <div 
+            className="w-full h-full min-h-[400px] flex items-center justify-center relative"
+            style={{
+              backgroundImage: `url(${game.thumbnail})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center'
+            }}
+          >
+            <div className="absolute inset-0 bg-black bg-opacity-50" />
+            <button
+              onClick={() => setIsGameLoaded(true)}
+              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors relative z-10"
+            >
+              Play Game
+            </button>
+          </div>
+        ) : (
+          <iframe
+            src={game.buildUrl}
+            title={game.title}
+            className="w-full h-full min-h-[400px]"
+            allowFullScreen
+          />
+        )}
       </div>
-      <Image
-        src={game.thumbnail}
-        alt={game.title}
-        width={320}
-        height={180}
-        className="rounded shadow-md mb-4"
-      />
 
       {/* Content Blocks Section */}
       {game.content && game.content.length > 0 && (
