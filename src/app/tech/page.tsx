@@ -1,35 +1,40 @@
+"use client";
+import { techs } from "@/data/techs";
+import Link from "next/link";
+import Image from "next/image";
+import { ContentBlock } from "@/components/ContentBlock";
+
 export default function TechPage() {
   return (
     <div>
       <div className="container-custom py-12">
         <h1 className="section-title">Tech & Code</h1>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Example code snippet card */}
-          <div className="card">
-            <h3 className="text-xl font-semibold mb-4">Code Snippet Title</h3>
-            <div className="bg-gray-900 rounded-lg p-4 mb-4">
-              <pre className="text-gray-100 overflow-x-auto">
-                <code>{`// Example code snippet\nfunction example() {\n  console.log(\"Hello, World!\");\n}`}</code>
-              </pre>
-            </div>
-            <p className="text-gray-600">
-              Explanation of the code snippet and its use cases.
-            </p>
-            <div className="mt-4 flex gap-2">
-              <span className="tag bg-purple-100 text-purple-800">JavaScript</span>
-            </div>
-          </div>
-          {/* Example technical article card */}
-          <div className="card">
-            <h3 className="text-xl font-semibold mb-4">Technical Article Title</h3>
-            <p className="text-gray-600 mb-4">
-              Brief overview of the technical concept or implementation being discussed.
-            </p>
-            <div className="flex gap-2">
-              <span className="tag bg-yellow-100 text-yellow-800">Tutorial</span>
-              <span className="tag bg-red-100 text-red-800">Game Development</span>
-            </div>
-          </div>
+          {techs.map((tech) => (
+            <Link
+              key={tech.slug}
+              href={`/tech/${tech.slug}`}
+              className="card relative overflow-hidden group transform hover:-translate-y-1 transition-all duration-200"
+            >
+              <div 
+                className="absolute inset-0 bg-cover bg-center transition-transform duration-300 group-hover:scale-105"
+                style={{ backgroundImage: `url(${tech.thumbnail})` }}
+              >
+                <div className="absolute inset-0 bg-gradient-to-b from-black/70 to-black/90" />
+              </div>
+              <div className="relative z-10">
+                <h3 className="text-xl font-semibold mb-4 text-white group-hover:text-indigo-400 transition-colors">{tech.title}</h3>
+                <p className="text-gray-200 mb-4">{tech.description}</p>
+                <div className="flex gap-2 flex-wrap">
+                  {tech.tags.map((tag) => (
+                    <span key={tag} className="tag bg-white/20 text-white">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </Link>
+          ))}          
         </div>
       </div>
     </div>

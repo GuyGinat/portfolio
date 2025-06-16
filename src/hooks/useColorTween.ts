@@ -1,6 +1,21 @@
 import { useRef, useEffect } from 'react';
 import Tween from '@tweenjs/tween.js';
 
+// Shared animation context
+const globalTweenGroup = new Tween.Group();
+let animationFrameId: number | null = null;
+
+function animate() {
+  animationFrameId = requestAnimationFrame(animate);
+  globalTweenGroup.update();
+}
+
+function startAnimationLoop() {
+  if (animationFrameId === null) {
+    animate();
+  }
+}
+
 function lerpColor(color1: string, color2: string, t: number) {
   // lerp between hex colors
   const r1 = parseInt(color1.slice(1, 3), 16);
@@ -18,15 +33,13 @@ function lerpColor(color1: string, color2: string, t: number) {
   return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
 }
 
-export function useColorTween() {
-  const group = useRef(new Tween.Group());
+const lerpOffset = (from: number, to: number, t: number) => {
+  return from + (to - from) * t;
+}
 
+export function useColorTween() {
   useEffect(() => {
-    function animate() {
-      requestAnimationFrame(animate);
-      group.current.update();
-    }
-    animate();
+    startAnimationLoop();
   }, []);
 
   const tweenCubeColors = (
@@ -40,7 +53,7 @@ export function useColorTween() {
     onUpdate: (color1: string, color2: string) => void
   ) => {
     const colorTweenObj = { t: 0 };
-    new Tween.Tween(colorTweenObj, group.current)
+    new Tween.Tween(colorTweenObj, globalTweenGroup)
       .to({ t: 1 }, duration)
       .easing(Tween.Easing.Quadratic.InOut)
       .onUpdate((obj) => {
@@ -53,3 +66,31 @@ export function useColorTween() {
 
   return { tweenCubeColors };
 } 
+
+export function useOffsetTween() {
+  useEffect(() => {
+    startAnimationLoop();
+  }, []);
+
+  const tweenCubeOffsets = (
+    fromX: number, 
+    fromY: number, 
+    toX: number,
+    toY: number,
+    duration: number = 1000,
+    onUpdate: (x: number, y: number) => void
+  ) => {
+    const offsetTweenObj = { t: 0 };
+    new Tween.Tween(offsetTweenObj, globalTweenGroup)
+      .to({ t: 1 }, duration)
+      .easing(Tween.Easing.Quadratic.InOut)
+      .onUpdate((obj) => {
+        const interpolatedOffsetX = lerpOffset(fromX, toX, obj.t);
+        const interpolatedOffsetY = lerpOffset(fromY, toY, obj.t);
+        onUpdate(interpolatedOffsetX, interpolatedOffsetY);
+      })
+      .start();
+  };
+
+  return { tweenCubeOffsets };
+}

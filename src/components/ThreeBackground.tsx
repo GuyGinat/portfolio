@@ -62,7 +62,8 @@ export default function ThreeBackground({
   cameraPosition,
   cameraFov,
   spacingOffset,
-  customCubeColors
+  customCubeColors,
+  customCubeOffsets
 }: {
   color1: string;
   color2: string;
@@ -74,6 +75,7 @@ export default function ThreeBackground({
   cameraFov: number;
   spacingOffset: number;
   customCubeColors: { [key: string]: { color1: string; color2: string } };
+  customCubeOffsets: { [key: string]: { x: number; y: number } };
 }) {
   return (
     <div className="fixed inset-0" style={{ zIndex: -1 }}>
@@ -89,7 +91,7 @@ export default function ThreeBackground({
           <directionalLight position={lightPosition} intensity={0.7} castShadow />
           <directionalLight position={[0, -5, -5]} intensity={0.7} />
           <Suspense fallback={null}>
-            <CubeGrid 
+            <CubeGrid
               color1={color1}
               color2={color2}
               waveAmplitude={waveAmplitude}
@@ -97,6 +99,7 @@ export default function ThreeBackground({
               waveSpeed={waveSpeed}
               spacingOffset={spacingOffset}
               customCubeColors={customCubeColors}
+              customCubeOffsets={customCubeOffsets}
             />
           </Suspense>
           {/* <OrbitControls enableZoom={false} enablePan={false} autoRotate={false} /> */}

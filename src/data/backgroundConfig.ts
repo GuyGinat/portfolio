@@ -25,8 +25,8 @@ export const defaultBackgroundConfig: BackgroundConfig = {
     color1: "#eeeeee",
     color2: "#eeeeee",
     waveAmplitude: 0,
-    waveFrequency: 0,
-    waveSpeed: 0,        
+    waveFrequency: 0.3,
+    waveSpeed: 4.5,        
     lightPosition: [0, 6, 5],
     cameraPosition: [0, 0, 8],
     cameraFov: 80,
@@ -45,6 +45,20 @@ export function createBackgroundConfig(config: Partial<BackgroundConfig>): Backg
 
 export const backgroundConfigMaps: Record<string, BackgroundConfig> = {
     "default": defaultBackgroundConfig,
+    "base": createBackgroundConfig({
+        color1: "#4338ca",
+        color2: "#7e22ce",
+        lightPosition: [0, 6, 5],
+        waveAmplitude: 1,
+        waveFrequency: 0.5,
+        waveSpeed: 2.5,
+        cameraPosition: [0, 0, 8],
+        cameraFov: 80,
+        spacingOffset: 0.1,
+        customColorsMap: null,
+        delayType: "ltr",
+        delay: 100,
+    }),
     "start": createBackgroundConfig({
         color1: "#eeeeee",
         color2: "#eeeeee",
@@ -78,7 +92,7 @@ export const backgroundConfigMaps: Record<string, BackgroundConfig> = {
         waveSpeed: -6,
         spacingOffset: 0.3,
     }),
-    "games": createBackgroundConfig({
+    "games2": createBackgroundConfig({
         color1: "#123456",
         color2: "#654321",
         lightPosition: [0, 6, 5],
@@ -91,6 +105,19 @@ export const backgroundConfigMaps: Record<string, BackgroundConfig> = {
         delayType: "rtl",
         delay: 100,
     }),
+    "games": createBackgroundConfig({
+        color1: "#123456",
+        color2: "#654321",
+        lightPosition: [0, 6, 5],
+        waveAmplitude: 0,
+        waveFrequency: 0.3,
+        waveSpeed: -4.5,
+        cameraPosition: [0, 0, 8],
+        cameraFov: 80,
+        spacingOffset: 0.3,
+        delayType: "rtl",
+        delay: 10,
+    }),
     "about": createBackgroundConfig({
         color1: "#abcdef",
         color2: "#fedcba",
@@ -102,16 +129,18 @@ export const backgroundConfigMaps: Record<string, BackgroundConfig> = {
         cameraFov: 80,
         spacingOffset: 2,
         delayType: "utd",
+        delay: 10,
     }),
     "writing": createBackgroundConfig({
         color1: "#eeeeee",
-        color2: "#dddddd",
+        color2: "#eeeeee",
         lightPosition: [0, 6, 5],
         waveAmplitude: 0,
         waveFrequency: 0.3,
         waveSpeed: -4.5,
-        spacingOffset: 0,
+        spacingOffset: -0.1,
         delayType: "ltr",
+        delay: 10,
     }),
     "tech": createBackgroundConfig({
         color1: "#0fe56a",
@@ -121,5 +150,6 @@ export const backgroundConfigMaps: Record<string, BackgroundConfig> = {
         waveFrequency: 0.3,
         waveSpeed: -4.5,
         delayType: "dtu",
+        delay: 10,
     }),
 }

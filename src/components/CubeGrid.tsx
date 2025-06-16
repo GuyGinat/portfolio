@@ -4,7 +4,7 @@ import { GRID_SIZE_Y, GRID_SIZE_X, CUBE_SIZE } from "./ThreeBackground";
 import { Cube } from "./Cube";
 
 export function CubeGrid({
-  color1, color2, waveAmplitude, waveFrequency, waveSpeed, spacingOffset, customCubeColors
+  color1, color2, waveAmplitude, waveFrequency, waveSpeed, spacingOffset, customCubeColors, customCubeOffsets
 }: {
   color1: string;
   color2: string;
@@ -13,6 +13,7 @@ export function CubeGrid({
   waveSpeed: number;
   spacingOffset: number;
   customCubeColors: { [key: string]: { color1: string; color2: string } };
+  customCubeOffsets: { [key: string]: { x: number; y: number } };
 }) {
   const [time, setTime] = useState(0);
 
@@ -40,9 +41,10 @@ export function CubeGrid({
   for (let x = 0; x < GRID_SIZE_X; x++) {
     cubeMap[x] = [];
     for (let y = 0; y < GRID_SIZE_Y; y++) {
+      const customOffset = customCubeOffsets[`${x}-${y}`] || { x: 0, y: 0 };
       const position: [number, number, number] = [
-        x * (CUBE_SIZE + spacingOffset) - xOffset,
-        y * (CUBE_SIZE + spacingOffset) - yOffset,
+        (x * (CUBE_SIZE + spacingOffset) - xOffset) + customOffset.x,
+        (y * (CUBE_SIZE + spacingOffset) - yOffset) + customOffset.y,
         -50,
       ];
       const actualX = x;
