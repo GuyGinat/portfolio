@@ -5,6 +5,7 @@ import ControlPanel from "./ControlPanel";
 import Link from "next/link";
 import { BackgroundConfig, backgroundConfigMaps } from "@/data/backgroundConfig";
 import { linear } from "@/data/easingFunctions";
+import { GRID_SIZE_X, GRID_SIZE_Y } from "./ThreeBackground";
 
 const DEFAULT_COLOR1 = "#eeeeee";
 const DEFAULT_COLOR2 = "#eeeeee";
@@ -50,10 +51,22 @@ export default function BackgroundWithControls({ children }: { children: ReactNo
   const [showMain, setShowMainState] = useState(false);
   const [spacingOffset, setSpacingOffset] = useState(DEFAULT_SPACING_OFFSET);
   const [customCubeColors, setCustomCubeColors] = useState<{ [key: string]: { color1: string; color2: string } }>({});
+  const [customCubeOffsets, setCustomCubeOffsets] = useState<{ [key: string]: { x: number; y: number } }>({});
   const [currentConfig, setCurrentConfig] = useState<BackgroundConfig>(backgroundConfigMaps["start"]);
   const [nextConfig, setNextConfig] = useState<BackgroundConfig>(backgroundConfigMaps["start"]);
   const [opacity, setOpacity] = useState(0);
   const [finishedIntro, setFinishedIntro] = useState(false);
+
+  useEffect(() => {
+    // set the custom cube offsets to x:0 y:0 for all cubes
+    const newOffsets: { [key: string]: { x: number; y: number } } = {};
+    for (let x = 0; x < GRID_SIZE_X; x++) {
+      for (let y = 0; y < GRID_SIZE_Y; y++) {
+        newOffsets[`${x}-${y}`] = { x: 0, y: 0 };
+      }
+    }
+    setCustomCubeOffsets(newOffsets);
+  }, []);
 
   const handleShowMain = (show: boolean) => {    
     setShowMainState(show);
@@ -74,6 +87,10 @@ export default function BackgroundWithControls({ children }: { children: ReactNo
     setCustomCubeColors(prev => ({ ...prev, [`${gridX}-${gridY}`]: { color1, color2 } }));
   };
 
+  const handleSetCubeOffset = (offsets: { [key: string]: { x: number; y: number } }) => {
+    setCustomCubeOffsets(offsets);
+  };
+
   const resetAll = () => {
     setColor1(DEFAULT_COLOR1);
     setColor2(DEFAULT_COLOR2);
@@ -86,6 +103,7 @@ export default function BackgroundWithControls({ children }: { children: ReactNo
     setShowMainState(true);
     setSpacingOffset(DEFAULT_SPACING_OFFSET);
     setCustomCubeColors({});
+    setCustomCubeOffsets({});
   };
 
   const writeTextRef = useRef<{ writeText: (text: string, x: number, y: number, c1: string, c2: string) => void }>(null);
@@ -151,6 +169,7 @@ export default function BackgroundWithControls({ children }: { children: ReactNo
         cameraFov={cameraFov}
         spacingOffset={spacingOffset}
         customCubeColors={customCubeColors}
+        customCubeOffsets={customCubeOffsets}
       />
       <ControlPanel
         onColor1Change={setColor1}
@@ -172,6 +191,8 @@ export default function BackgroundWithControls({ children }: { children: ReactNo
         setSpacingOffset={setSpacingOffset}
         customCubeColors={customCubeColors}
         setCustomCubeColor={handleSetCubeColor}
+        customCubeOffsets={customCubeOffsets}
+        setCustomCubeOffsets={handleSetCubeOffset}
         resetAll={resetAll}
         currentConfig={currentConfig}
         nextConfig={nextConfig}
@@ -196,7 +217,7 @@ export default function BackgroundWithControls({ children }: { children: ReactNo
                 <Link href="/games" className="nav-link">Games</Link>
                 <Link href="/tech" className="nav-link">Tech & Code</Link>
                 <Link href="/writing" className="nav-link">Game Design</Link>
-                <Link href="/about" className="nav-link">About</Link>
+                {/* <Link href="/about" className="nav-link">About</Link> */}
               </div>
             </div>
           </div>

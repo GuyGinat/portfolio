@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, forwardRef, useImperativeHandle } from 'react';
 import { GRID_SIZE_X, GRID_SIZE_Y } from './ThreeBackground';
 import Tween from '@tweenjs/tween.js';
-import { useColorTween } from '../hooks/useColorTween';
+import { useColorTween, useOffsetTween } from '../hooks/useColorTween';
 import { tinyFont } from '@/data/tinyFont';
 import { usePathname } from 'next/navigation';
 import { BackgroundConfig, backgroundConfigMaps } from '@/data/backgroundConfig';
@@ -26,6 +26,8 @@ interface ControlPanelProps {
   setSpacingOffset: (v: number) => void;
   customCubeColors: { [key: string]: { color1: string; color2: string } };
   setCustomCubeColor: (gridX: number, gridY: number, color1: string, color2: string) => void;
+  customCubeOffsets: { [key: string]: { x: number; y: number } };
+  setCustomCubeOffsets: (offsets: { [key: string]: { x: number; y: number } }) => void;
   resetAll: () => void;
   currentConfig: BackgroundConfig;
   nextConfig: BackgroundConfig;
@@ -74,7 +76,7 @@ function useDragNumber(value: number, setValue: (v: number) => void, step = 0.1)
   return { ref, onMouseDown };
 }
 
-type TabType = 'colors' | 'wave' | 'camera' | 'light';
+type TabType = 'colors' | 'wave' | 'camera' | 'light' | 'offsets';
 
 // Add this custom hook at the top level of the file, before the ControlPanel component
 function useBackgroundTween() {
@@ -156,6 +158,8 @@ function ControlPanel({
   setSpacingOffset,
   customCubeColors,
   setCustomCubeColor,
+  customCubeOffsets,
+  setCustomCubeOffsets,
   resetAll,
   currentConfig,
   nextConfig,
@@ -182,12 +186,14 @@ function ControlPanel({
   const [fullLerpColor2, setFullLerpColor2] = useState("#eeeeee");
   const [activeTab, setActiveTab] = useState<TabType>('colors');
   const { tweenCubeColors } = useColorTween();
+  const { tweenCubeOffsets } = useOffsetTween();
   const pathname = usePathname();  
   const { tweenConfig } = useBackgroundTween();
 
   useEffect(() => {
-    
-    const config = backgroundConfigMaps[pathname.slice(1)] || (finishedIntro ? backgroundConfigMaps["base"] : backgroundConfigMaps["default"]);
+    const segments = pathname.split("/").filter(Boolean);
+    console.log(segments);
+    const config = backgroundConfigMaps[segments[0]] || (finishedIntro ? backgroundConfigMaps["base"] : backgroundConfigMaps["default"]);
     if (config) {
       setBackgroundConfig(config);
     }
@@ -276,6 +282,10 @@ function ControlPanel({
     );
   }
 
+  const lerpCubeOffsets = (x: number, y: number, fromOffset: number, toOffset: number) => {
+    tweenCubeOffsets(x, y, fromOffset, toOffset, 1000, (newOffset) => setCustomCubeOffsets({ ...customCubeOffsets, [`${x}-${y}`]: { x: newOffset, y: newOffset } }));
+  }
+
   const lerpAllCubes = () => {
     for (let x = 0; x < GRID_SIZE_X; x++) {
       for (let y = 0; y < GRID_SIZE_Y; y++) {
@@ -352,6 +362,31 @@ function ControlPanel({
 
   const floodFillTest = () => {
     floodFill(14, 10, "#000000", "#ffffff");
+  }
+
+  const lerpAllCubeOffsets = (newOffsets: { [key: string]: { x: number; y: number } }) => {
+    for (let x = 0; x < GRID_SIZE_X; x++) {
+      for (let y = 0; y < GRID_SIZE_Y; y++) {
+        setTimeout(() => {
+          lerpCubeOffsets(x, y, customCubeOffsets[`${x}-${y}`]?.x || 0, newOffsets[`${x}-${y}`]?.x || 0);
+        }, 100 * x);
+      }
+    }
+  };
+
+  const splitCubeOffsets = () => {
+    const newOffsets = { ...customCubeOffsets };
+    for (const key in newOffsets) {
+      const [x, y] = key.split('-').map(Number);
+      // split the offset so that cube on the higher side of x get +1 and the lower side get -1 on x
+      if (x < GRID_SIZE_X / 2) {
+        newOffsets[key] = { x: newOffsets[key].x - 1, y: newOffsets[key].y };
+      } else {
+        newOffsets[key] = { x: newOffsets[key].x + 1, y: newOffsets[key].y };
+      }
+      // split the offset so that cube on the higher side of y get +1 and the lower side get -1 on y
+    }
+    lerpAllCubeOffsets(newOffsets);
   }
 
   const renderTabContent = () => {
@@ -538,7 +573,25 @@ function ControlPanel({
             </div>
           </>
         );
-    }
+      case 'offsets':
+        return (
+          <>
+            <div className="flex flex-col gap-2">
+              <label className="block text-sm text-white mb-1">Offset</label>
+              <button className="px-3 py-1 rounded bg-blue-500 text-white text-xs font-bold hover:bg-blue-600 transition"
+                onClick={() => lerpCubeOffsets(selectedGridX, selectedGridY, customCubeOffsets[selectedKey]?.x || 0, customCubeOffsets[selectedKey]?.y || 0)}
+              >
+                Reset Offset
+              </button>
+              <button className="px-3 py-1 rounded bg-blue-500 text-white text-xs font-bold hover:bg-blue-600 transition"
+                onClick={() => splitCubeOffsets()}
+              >
+                Split
+              </button>
+            </div>
+          </>
+        );
+      }
   };
 
   return (
@@ -594,7 +647,7 @@ function ControlPanel({
             </div>
             {/* Tabs */}
             <div className="flex space-x-1 mb-4">
-              {(['colors', 'wave', 'camera', 'light'] as TabType[]).map((tab) => (
+              {(['colors', 'wave', 'camera', 'light', 'offsets'] as TabType[]).map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}

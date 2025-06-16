@@ -45,6 +45,7 @@ export interface ContentBlock {
     textAlign?: string;
     width?: string | number;
     height?: string | number;
+    shadow?: string;
   };
 }
 

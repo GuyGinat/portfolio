@@ -1,12 +1,17 @@
+'use client';
+
 import { ContentBlock } from "@/components/ContentBlock";
 import { towerContent } from "@/data/tower-content";
 import type { ContentBlock as ContentBlockType } from "@/types/content";
-import { div } from "three/tsl";
+import useWindowSize, { ScreenType as ScreenTypeEnum } from "@/hooks/useWindowSize";
 
 export default function TowerPage() {
+  const { width, height, screenType } = useWindowSize();
+  const isMobile = screenType === ScreenTypeEnum.MOBILE || screenType === ScreenTypeEnum.SM;
+
   return (
     <div className="flex flex-col items-center justify-center min-h-[80vh] w-full h-full">
-      <div className="bg-gray-200 opacity-90 flex flex-col items-center py-12 justify-center min-h-[80vh] w-5/6">
+      <div className="bg-gray-200 opacity-90 flex flex-col items-center py-12 justify-center min-h-[80vh] w-5/6 px-4 rounded-md">
         <h1 className="text-3xl font-bold mb-4 text-center">Tower</h1>
         <p className="text-gray-600 mb-6 text-center max-w-2xl italic">
           An exploration of grids, circles and game design.
@@ -17,7 +22,7 @@ export default function TowerPage() {
           {towerContent.map((block: ContentBlockType, index: number) => {
             // Check if this block and the next one should be side by side
             const nextBlock = towerContent[index + 1];
-            const isSideBySide = block.sideBySide && nextBlock;
+            const isSideBySide = block.sideBySide && nextBlock && !isMobile;
 
             if (isSideBySide) {
               return (
