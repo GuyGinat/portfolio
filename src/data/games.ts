@@ -76,7 +76,7 @@ export const games: Game[] = [
     content: [
       {
         type: "text",
-        content: "Spinning Roles is my submission to the 2022 GMTK Game Jam.\nBuilt around the theme of Roll Of The Dice\n\nI wanted to build a game that does not use the classical definition of a dice, utilizing mechanics of randomness, but rather focus on what happens when the dice rolls, resulting in a gravity based 3D puzzle game",
+        content: "Spinning Roles is my submission to the 2022 GMTK Game Jam.\nBuilt around the theme of Roll Of The Dice.\n\nI wanted to build a game that does not use the classical definition of a dice, utilizing mechanics of randomness, but rather focus on what happens when the dice rolls, resulting in a gravity based 3D puzzle game",
         style: textStyle
       },
       {
