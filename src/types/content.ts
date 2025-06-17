@@ -1,4 +1,4 @@
-export type ContentType = 'text' | 'image' | 'video' | 'build' | 'code' | 'download';
+export type ContentType = 'text' | 'image' | 'video' | 'build' | 'code' | 'download' | 'list';
 
 export interface ContentBlock {  
   type: ContentType;
@@ -22,6 +22,9 @@ export interface ContentBlock {
   fileName?: string;
   fileSize?: string;
   fileType?: string;
+  // List specific properties
+  items?: string[]; // Array of items for bulleted list
+  subheading?: string; // Optional subheading for list
   // Text link properties
   links?: {
     text: string;

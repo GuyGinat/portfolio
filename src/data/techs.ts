@@ -19,53 +19,6 @@ const textStyle = {
 
 export const techs: Tech[] = [
     {
-        slug: "super-session",
-        title: "Super Session",
-        thumbnail: "/images/tech/session.jpg",
-        description: "A web app that indexes all your YouTube watch history and allows you to search it by keywords, leading to the timestamps within those videos.",
-        tags: ["Javascript", "Chrome Extension", "Node.js", "Elasticsearch"],
-        content: [
-            {
-                type: "text",
-                content: "Super Session is one of my favorite tools I got to make over the years. The idea behind it was to make a tool that would allow me to search through my YouTube watch history by keywords, and then get the timestamps of the videos that contain those keywords. At the time I started making this I was learning a lot of different tools on YouTube, (Unity, Blender, Ableton, Adobe), I got tutorial fatigue, and it was getting hard to find older videos that I have watched before I was working as a web developer at a small startup that used Elasitcsearch for their search engine, so I thought I could use it to index my watch history. I made a chrome extension that would send to a local server the captions of the videos and a frontend webpage to view them. Therefore, this project is broken down to 3 different parts:",
-                style: textStyle
-            },
-            {
-                type: "text",
-                content: "Chrome extension that sends the captions of the videos to the server - github",
-                style: textStyle,
-                links: [
-                    {
-                        text: "github",
-                        url: "https://github.com/GuyGinat/extended-ext-v3"
-                    }
-                ]
-            },
-            {
-                type: "text",
-                content: "Node.js server that indexes the captions and allows you to search them - github",
-                style: textStyle,
-                links: [
-                    {
-                        text: "github",
-                        url: "https://github.com/GuyGinat/extnded-back"
-                    }
-                ]
-            },
-            {
-                type: "text",
-                content: "Frontend webpage to view the captions and search them - github",
-                style: textStyle,
-                links: [
-                    {
-                        text: "github",
-                        url: "https://github.com/GuyGinat/extended-front"
-                    }
-                ]
-            }
-        ],
-    },
-    {
         slug: "unity-tools",
         title: "Unity Tools",
         thumbnail: "/images/tech/code.jpg",
@@ -149,6 +102,95 @@ export const techs: Tech[] = [
 
         ],
     },
+    {
+        slug: "star-chart",
+        title: "Star Chart",
+        thumbnail: "/images/tech/starchart.jpg",
+        description: "A presentations tool built within Unity",
+        tags: ["C#", "Unity", "Editor Tools"],
+        content: [
+            {
+                title: "Star Chart",
+                type: "text",                
+                content: "While pursuing my MFA in Game Design I found myself needing a presentation tool that would enable me to do things that Google Slides or Canva could not provide (or I was too lazy to look up). From working in mobile games I had a lot of experience with creating Unity UI systems, so I decided to make the presentation tool myself, crazy? might be, but I love the end result.",
+                style: textStyle
+            },
+            {
+                type: "text",
+                sideBySide: true,
+                content: "This is one of the presentations I made, it explores how Pacific Drive uses diegetic UI to enhance the desired design exxperience for the game",
+                style: textStyle
+            },
+            {
+                type: "list",
+                style: textStyle,         
+                subheading: "Controls",
+                items: [
+                    "Right and left arrow keys change slides",
+                    "Press S to toggle movement animation",
+                    "Press TAB to open the slide",
+                    "Scroll mouse to zoom in/out",
+                    "Drag to move around",
+                ]
+            },                     
+            {
+                type: "build",
+                url: "/games/starchart/index.html",
+                alt: "Star Chart",
+                referenceText: "Pacific Drive Superlative UX/UI Presentation",
+                minWidth: 200,
+                minHeight: 500,
+            },
+
+        ],
+    },
+    {
+        slug: "super-session",
+        title: "Super Session",
+        thumbnail: "/images/tech/session.jpg",
+        description: "A web app that indexes all your YouTube watch history and allows you to search it by keywords, leading to the timestamps within those videos.",
+        tags: ["Javascript", "Chrome Extension", "Node.js", "Elasticsearch"],
+        content: [
+            {
+                type: "text",
+                content: "Super Session is one of my favorite tools I got to make over the years. The idea behind it was to make a tool that would allow me to search through my YouTube watch history by keywords, and then get the timestamps of the videos that contain those keywords. At the time I started making this I was learning a lot of different tools on YouTube, (Unity, Blender, Ableton, Adobe), I got tutorial fatigue, and it was getting hard to find older videos that I have watched before I was working as a web developer at a small startup that used Elasitcsearch for their search engine, so I thought I could use it to index my watch history. I made a chrome extension that would send to a local server the captions of the videos and a frontend webpage to view them. Therefore, this project is broken down to 3 different parts:",
+                style: textStyle
+            },
+            {
+                type: "text",
+                content: "Chrome extension that sends the captions of the videos to the server - github",
+                style: textStyle,
+                links: [
+                    {
+                        text: "github",
+                        url: "https://github.com/GuyGinat/extended-ext-v3"
+                    }
+                ]
+            },
+            {
+                type: "text",
+                content: "Node.js server that indexes the captions and allows you to search them - github",
+                style: textStyle,
+                links: [
+                    {
+                        text: "github",
+                        url: "https://github.com/GuyGinat/extnded-back"
+                    }
+                ]
+            },
+            {
+                type: "text",
+                content: "Frontend webpage to view the captions and search them - github",
+                style: textStyle,
+                links: [
+                    {
+                        text: "github",
+                        url: "https://github.com/GuyGinat/extended-front"
+                    }
+                ]
+            }
+        ],
+    },    
     {
         slug: "noteman",
         title: "Noteman",

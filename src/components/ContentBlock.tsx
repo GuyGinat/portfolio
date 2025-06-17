@@ -302,6 +302,42 @@ export function ContentBlock({ block, isSideBySide = false }: ContentBlockProps)
         </div>
       );
 
+    case 'list':
+      return (
+        <div 
+          className={`prose max-w-none mb-8 ${isSideBySide ? 'flex-1' : ''}`}
+          style={getBlockStyles()}
+        >
+          {block.title && (
+            <h2 
+              className="text-2xl font-bold mb-4"
+              style={block.style?.textColor ? { color: block.style.textColor } : undefined}
+            >
+              {block.title}
+            </h2>
+          )}
+          {block.subheading && (
+            <h3 
+              className="text-lg font-semibold mb-3"
+              style={block.style?.textColor ? { color: block.style.textColor } : undefined}
+            >
+              {block.subheading}
+            </h3>
+          )}
+          <ul className="list-disc pl-6 space-y-2">
+            {block.items?.map((item, index) => (
+              <li 
+                key={index}
+                className="text-gray-700"
+                style={block.style?.textColor ? { color: block.style.textColor } : undefined}
+              >
+                {renderTextWithLinks(item, block.links)}
+              </li>
+            ))}
+          </ul>
+        </div>
+      );
+
     default:
       return null;
   }
