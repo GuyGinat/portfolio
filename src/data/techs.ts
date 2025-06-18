@@ -128,7 +128,7 @@ export const techs: Tech[] = [
                 items: [
                     "Right and left arrow keys change slides",
                     "Press S to toggle movement animation",
-                    "Press TAB to open the slide",
+                    "Press TAB to open the slide selection menu",
                     "Scroll mouse to zoom in/out",
                     "Drag to move around",
                 ]
@@ -139,7 +139,7 @@ export const techs: Tech[] = [
                 alt: "Star Chart",
                 referenceText: "Pacific Drive Superlative UX/UI Presentation",
                 minWidth: 200,
-                minHeight: 500,
+                minHeight: 700,
             },
 
         ],

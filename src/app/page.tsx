@@ -15,7 +15,7 @@ export default function Home() {
         </section>
 
         {/* Section Previews */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Games Section Preview */}
           <Link href="/games" className="card group transform hover:-translate-y-1 transition-all duration-200">
             <div className="h-48 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-lg mb-4 flex items-center justify-center">
@@ -30,14 +30,14 @@ export default function Home() {
             </p>
           </Link>
 
-          {/* Tech & Code Section Preview */}
+          {/* Other Section Preview */}
           <Link href="/tech" className="card group transform hover:-translate-y-1 transition-all duration-200">
             <div className="h-48 bg-gradient-to-br from-blue-100 to-cyan-100 rounded-lg mb-4 flex items-center justify-center">
               <svg className="w-16 h-16 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
               </svg>
             </div>
-            <h2 className="text-2xl font-semibold mb-4 group-hover:text-blue-600 transition-colors">Tech & Code</h2>
+            <h2 className="text-2xl font-semibold mb-4 group-hover:text-blue-600 transition-colors">Other</h2>
             <p className="text-gray-600">
               Browse through code snippets and technical implementations
             </p>
@@ -53,6 +53,19 @@ export default function Home() {
             <h2 className="text-2xl font-semibold mb-4 group-hover:text-purple-600 transition-colors">Game Design Writing</h2>
             <p className="text-gray-600">
               Read my thoughts and analysis on game design principles
+            </p>
+          </Link>
+
+          {/* Contact Section Preview */}
+          <Link href="/contact" className="card group transform hover:-translate-y-1 transition-all duration-200">
+            <div className="h-48 bg-gradient-to-br from-green-100 to-emerald-100 rounded-lg mb-4 flex items-center justify-center">
+              <svg className="w-16 h-16 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+            </div>
+            <h2 className="text-2xl font-semibold mb-4 group-hover:text-green-600 transition-colors">Contact</h2>
+            <p className="text-gray-600">
+              Get in touch via email, LinkedIn, or check out my itch.io
             </p>
           </Link>
         </div>

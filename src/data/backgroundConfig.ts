@@ -143,13 +143,13 @@ export const backgroundConfigMaps: Record<string, BackgroundConfig> = {
         delay: 10,
     }),
     "tech": createBackgroundConfig({
-        color1: "#0fe56a",
-        color2: "#9dc123",
+        color1: "#abcdef",
+        color2: "#fedcba",
         lightPosition: [0, 6, 5],
         waveAmplitude: 0,
-        waveFrequency: 0.3,
-        waveSpeed: -4.5,
-        delayType: "dtu",
+        waveFrequency: 0.1,
+        waveSpeed: -1.5,
+        delayType: "ltr",
         delay: 10,
     }),
 }
