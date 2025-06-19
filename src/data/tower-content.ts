@@ -24,14 +24,20 @@ export const towerContent: ContentBlock[] = [
   },
   {
     type: 'text',
-    content: "A small note before we start, I highly recommend playing the games in full screen, on a pc (phone is not supported). Also, some of these games have sound, some don't, and! they are prototypes, so they are not perfect, but they are fun to play and I hope you enjoy them.",
+    content: "A small note before we start, I highly recommend playing the games in full screen, on a pc (phone is not supported). Also, some of these games have sound, some don't, and! they are prototypes, so they are not perfect, but they are fun to play and I hope you enjoy them.\n\nAlso, this project has been made as a part of my Game Design Thesis, there is a museum like experience build that you can download here.",
     style: {
       marginBottom: 100,
       backgroundColor: '#552222',
       textColor: 'white',
       borderRadius: 10,
       padding: 15,
-    }
+    },
+    links: [
+      {
+        text: 'download here',
+        url: 'https://guyginat.itch.io/tower',
+      }
+    ]
   },
   {
     title: 'Rogue',
@@ -56,7 +62,7 @@ export const towerContent: ContentBlock[] = [
     url: '/images/tower/tower.png',
     alt: 'Tower',
     minHeight: 500,
-    referenceText: 'This is where Rogue build goes'
+    referenceText: 'Currently under construction'
   },
   {
     title: 'Nurikabe',
@@ -72,11 +78,11 @@ export const towerContent: ContentBlock[] = [
     referenceText: 'Nurikabe'
   },
   {
-    type: 'image',
-    url: '/images/tower/tower.png',
+    type: 'build',
+    url: '/games/tower/nurikabe/index.html',
     alt: 'Tower',
     minHeight: 500,
-    referenceText: 'This is where Nurikabe build goes'
+    referenceText: 'Nurikabe'
   },
   {
     title: 'Action Game',
@@ -119,7 +125,7 @@ export const towerContent: ContentBlock[] = [
     url: '/images/tower/tower.png',
     alt: 'Tower',
     minHeight: 500,
-    referenceText: 'This is where Tactics build goes'
+    referenceText: 'Currently under construction'
   },
   {
     type: 'text',
@@ -147,7 +153,7 @@ export const towerContent: ContentBlock[] = [
     url: '/games/tower/CreationTool/index.html',
     alt: 'Tower',
     minHeight: 800,
-    referenceText: 'This is where Small Engine build goes',
+    referenceText: 'Small Game Engine',
     style: {
       marginBottom: 100,
     }
