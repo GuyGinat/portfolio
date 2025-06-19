@@ -30,10 +30,10 @@ export default function GamesPage() {
                     {"MFA Thesis Project"}
                   </span> 
                   <span key={"Systems"} className="tag bg-blue-100 text-blue-800">
-                    {"Systems"}
-                  </span> 
-                  <span key={"Systems"} className="tag bg-blue-100 text-blue-800">
-                    {"Systems"}
+                    {"System Design"}
+                  </span>
+                  <span key={"Experimental"} className="tag bg-blue-100 text-blue-800">
+                    {"Experimental"}
                   </span>
               </div>
             </Link>
