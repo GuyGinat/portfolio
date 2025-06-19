@@ -213,7 +213,15 @@ export const towerContent: ContentBlock[] = [
     title: 'Playdate for the Win',
     type: 'text',
     sideBySide: true,
-    content: "Godamn I love this little thing, I got one a while back and I thought this would be an interesting way to get out of the Unity ecosystem and implement the radial grid on a different game engine, turned out to this cute little game where you use the crank to rotate the rings.",
+    content: "Godamn I love this little thing, I got one a while back and I thought this would be an interesting way to get out of the Unity ecosystem and implement the radial grid on a different game engine, turned out to this cute little game where you use the crank to rotate the rings.\nIf you have a playdate and want to try it out you can download it here and side load it to your playdate.",
+    links: [
+      {
+        text: 'download it here',
+        url: '/downloads/BlackHoleVisitorCenter.zip',
+        isDownload: true,
+        fileName: 'Black Hole Visitor Center.zip'
+      }
+    ],
     style: {
       marginBottom: 1,
     }

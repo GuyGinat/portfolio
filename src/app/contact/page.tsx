@@ -4,7 +4,7 @@ export default function ContactPage() {
       <div className="container-custom py-12">
         <h1 className="section-title">Contact</h1>
         <div className="max-w-2xl mx-auto">
-          <p className="text-xl text-gray-600 mb-12 text-center">
+          <p className="text-xl text-gray-400 mb-12 text-center">
             Get in touch with me through any of these channels
           </p>
           

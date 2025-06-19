@@ -19,7 +19,7 @@ export default function Home() {
         </section>
 
         {/* Section Previews */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {/* Games Section Preview */}
           <Link href="/games" className="card group transform hover:-translate-y-1 transition-all duration-200">
             <div className="h-48 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-lg mb-4 flex items-center justify-center">
@@ -48,7 +48,7 @@ export default function Home() {
           </Link>
 
           {/* Game Design Writing Section Preview */}
-          <Link href="/writing" className="card group transform hover:-translate-y-1 transition-all duration-200">
+          {/* <Link href="/writing" className="card group transform hover:-translate-y-1 transition-all duration-200">
             <div className="h-48 bg-gradient-to-br from-purple-100 to-pink-100 rounded-lg mb-4 flex items-center justify-center">
               <svg className="w-16 h-16 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -58,7 +58,7 @@ export default function Home() {
             <p className="text-gray-600">
               Read my thoughts and analysis on game design principles
             </p>
-          </Link>
+          </Link> */}
 
           {/* Contact Section Preview */}
           <Link href="/contact" className="card group transform hover:-translate-y-1 transition-all duration-200">
