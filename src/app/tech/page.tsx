@@ -8,8 +8,8 @@ export default function TechPage() {
   return (
     <div>
       <div className="container-custom py-12">
-        <h1 className="section-title">Tech & Code</h1>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <h1 className="section-title">Other</h1>
+        <div className="grid grid-cols-1 lg:grid-cols-1 gap-8">
           {techs.map((tech) => (
             <Link
               key={tech.slug}

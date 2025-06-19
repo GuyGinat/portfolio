@@ -37,6 +37,17 @@ body {
     @apply bg-white/15 rounded-lg shadow-sm border border-gray-500 p-6 hover:shadow-md transition-all duration-200 hover:border-indigo-100;
   }
   
+  .card p {
+    @apply text-gray-400;
+  }
+
+  .card h2 {
+    @apply text-gray-300;
+  }
+
+  .card h3 {
+    @apply text-gray-300;
+  }
 
   .nav-link {
     @apply text-gray-600 hover:text-indigo-600 px-4 py-2 rounded-md transition-colors duration-200;

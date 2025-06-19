@@ -21,7 +21,7 @@ export const games: Game[] = [
   {
     slug: "belgrad",
     title: "Belgrad Park",
-    description: "A fun Unity WebGL game demo.",
+    description: "An experimental time looping horror game made in Unity.",
     tags: ["First Person", "Horror", "Puzzle", "Experimental"],
     thumbnail: "/images/belgrad/belgrad-cover.png",
     // buildUrl: "/games/spinning-roles/index.html",
@@ -69,7 +69,7 @@ export const games: Game[] = [
   {
     slug: "spinning-roles",
     title: "Spinning Roles",
-    description: "A fun Unity WebGL game demo.",
+    description: "Physics based 3D puzzle game.",
     tags: ["Physics", "Puzzle"],
     thumbnail: "/games/spinning-roles/thumb.jpg",
     buildUrl: "/games/spinning-roles/index.html",
@@ -99,7 +99,7 @@ export const games: Game[] = [
   {
     slug: "jjj",
     title: "Jiggle Jaggle Juggling",
-    description: "A fun Unity WebGL game demo.",
+    description: "A simulation of juggling physics and cognitive overload.",
     tags: ["Physics", "Juggling"],
     thumbnail: "/games/jjj/jjj-cover.jpg",
     buildUrl: "/games/jjj/index.html",
@@ -115,14 +115,15 @@ export const games: Game[] = [
   {
     slug: "pusher",
     title: "Pusher",
-    description: "A fun Unity WebGL game demo.",
+    description: "Small split screen multiplayer game.",
     tags: ["Multiplayer"],
     thumbnail: "/games/pusher/Pusher.png",
     buildUrl: "/games/pusher/index.html",
     content: [
       {
         type: "text",
-        content: "Pusher is an experiment with same screen multiplayer with different control schemes, I wanted to make a game that you can pick up and play with a friend without any learning curve, trying to make it as polished as possible within a small time frame.\n\nTry playing the game with one player on a keyboard and the other with a controller (you can also do whatever 2 control schemes you want)",
+        // content: "Pusher is an experiment with same screen multiplayer with different control schemes, I wanted to make a game that you can pick up and play with a friend without any learning curve, trying to make it as polished as possible within a small time frame.\n\nTry playing the game with one player on a keyboard and the other with a controller (you can also do whatever 2 control schemes you want)",
+        content: "Pusher is an experiment with same screen multiplayer with different control schemes, I wanted to make a game that you can pick up and play with a friend without any learning curve, trying to make it as polished as possible within a small time frame.\n\nPlay the game with one player on a keyboard and the other with a controller",
         style: textStyle
       },
       
@@ -131,8 +132,8 @@ export const games: Game[] = [
   {
     slug: "berto",
     title: "Berto",
-    description: "A fun Unity WebGL game demo.",
-    tags: ["Rage", "Keyboard Only", "Not Typing", "But Similar"],
+    description: "A keyboard only game where you traverse a gauntlet of keyboard maneuvers.",
+    tags: ["Rage", "Keyboard Only", "Sort of Typing"],
     thumbnail: "/games/berto/berto.jpg",
     buildUrl: "/games/berto/index.html",
     content: [
@@ -149,7 +150,7 @@ export const games: Game[] = [
       },
       {
         type: "text",
-        content: "Berto is a game where you control a small pink thing, moving him across pillars that correspond to keyboard keys, crossing difficult keyboard traversing gauntlets and badass boss fights.The idea came from trying to utilize the whole keyboard, making it some sort of playground for your fingers.\n\nIt is also the first game I made completely by myself, including sound and art, and I am very proud of myself for that.",
+        content: "Berto is a game where you control a small pink thing, moving him across pillars that correspond to keyboard keys, crossing difficult keyboard traversing gauntlets and badass boss fights. The idea came from trying to utilize the whole keyboard, making it some sort of playground for your fingers, experimenting with non conventional control schemes.\n\nIt is also the first game I made completely by myself, including sound and art, and I am very proud of it.",
         style: textStyle
       },
       {

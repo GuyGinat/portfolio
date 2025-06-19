@@ -395,7 +395,7 @@ function ControlPanel({
         return (
           <>
             {/* Color pickers */}
-            <div>
+            {/* <div>
               <label className="block text-sm text-white mb-1">Color 1</label>
               <div className="flex items-center space-x-4">
                 <input
@@ -418,7 +418,7 @@ function ControlPanel({
                 />
                 <button className='flex-4 h-8 rounded bg-black/30 text-white px-1'>Change</button>
               </div>
-            </div>
+            </div> */}
             {/* Custom Cube Color Picker */}
             <div>
               <label className="block text-sm text-white mb-1">Set Cube Colors</label>
@@ -647,7 +647,8 @@ function ControlPanel({
             </div>
             {/* Tabs */}
             <div className="flex space-x-1 mb-4">
-              {(['colors', 'wave', 'camera', 'light', 'offsets'] as TabType[]).map((tab) => (
+              {/* {(['colors', 'wave', 'camera', 'light', 'offsets'] as TabType[]).map((tab) => ( */}
+              {(['colors', 'wave', 'camera', 'light'] as TabType[]).map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}

@@ -7,15 +7,19 @@ export default function Home() {
         {/* Hero Section */}
         <section className="text-center mb-20">
           <h1 className="text-5xl font-bold mb-6 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-            Technical Game Designer & Other Stuff
+            Technical Game Designer
           </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Hello!<br/> I&apos;m Guy Ginat, a technical game designer. I love making games, tools, web apps, and sometimes, I also make some music.
+          <p className="text-xl text-gray-200 max-w-2xl mx-auto">
+            Hello!<br/> I&apos;m Guy Ginat, a technical game designer. I love making games, tools, web apps, experimenting with new technologies and input devices, sometimes, I also make some music.
+          </p>
+          <br/>
+          <p className="text-xl text-gray-200 max-w-2xl mx-auto">
+            I have previoulsy worked as a mobile games developer and a full stack web developer, I have an MFA in Game Design from the NYU Game Center, and a BSc. in computer science from Reichman University.
           </p>
         </section>
 
         {/* Section Previews */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {/* Games Section Preview */}
           <Link href="/games" className="card group transform hover:-translate-y-1 transition-all duration-200">
             <div className="h-48 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-lg mb-4 flex items-center justify-center">
@@ -30,21 +34,21 @@ export default function Home() {
             </p>
           </Link>
 
-          {/* Tech & Code Section Preview */}
+          {/* Other Section Preview */}
           <Link href="/tech" className="card group transform hover:-translate-y-1 transition-all duration-200">
             <div className="h-48 bg-gradient-to-br from-blue-100 to-cyan-100 rounded-lg mb-4 flex items-center justify-center">
               <svg className="w-16 h-16 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
               </svg>
             </div>
-            <h2 className="text-2xl font-semibold mb-4 group-hover:text-blue-600 transition-colors">Tech & Code</h2>
+            <h2 className="text-2xl font-semibold mb-4 group-hover:text-blue-600 transition-colors">Other</h2>
             <p className="text-gray-600">
-              Browse through code snippets and technical implementations
+              Browse through code snippets and technical implementations of tools I have made
             </p>
           </Link>
 
           {/* Game Design Writing Section Preview */}
-          <Link href="/writing" className="card group transform hover:-translate-y-1 transition-all duration-200">
+          {/* <Link href="/writing" className="card group transform hover:-translate-y-1 transition-all duration-200">
             <div className="h-48 bg-gradient-to-br from-purple-100 to-pink-100 rounded-lg mb-4 flex items-center justify-center">
               <svg className="w-16 h-16 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -53,6 +57,19 @@ export default function Home() {
             <h2 className="text-2xl font-semibold mb-4 group-hover:text-purple-600 transition-colors">Game Design Writing</h2>
             <p className="text-gray-600">
               Read my thoughts and analysis on game design principles
+            </p>
+          </Link> */}
+
+          {/* Contact Section Preview */}
+          <Link href="/contact" className="card group transform hover:-translate-y-1 transition-all duration-200">
+            <div className="h-48 bg-gradient-to-br from-green-100 to-emerald-100 rounded-lg mb-4 flex items-center justify-center">
+              <svg className="w-16 h-16 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+            </div>
+            <h2 className="text-2xl font-semibold mb-4 group-hover:text-green-600 transition-colors">Contact</h2>
+            <p className="text-gray-600">
+              Get in touch via email, LinkedIn, or check out my itch.io
             </p>
           </Link>
         </div>
