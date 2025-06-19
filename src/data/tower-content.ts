@@ -213,7 +213,7 @@ export const towerContent: ContentBlock[] = [
     title: 'Playdate for the Win',
     type: 'text',
     sideBySide: true,
-    content: "Since I started working on this I really wanted to have a physical manifestation of the system I made, and since I already have the calculus of the system lodged into my brain so hard I knew how to bring this vision into life.\nUtilizing Adobe Illustrators scripting capabilities to generate a mathematically accurate definition of a radial grid.",
+    content: "Godamn I love this little thing, I got one a while back and I thought this would be an interesting way to get out of the Unity ecosystem and implement the radial grid on a different game engine, turned out to this cute little game where you use the crank to rotate the rings.",
     style: {
       marginBottom: 1,
     }

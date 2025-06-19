@@ -213,11 +213,11 @@ export default function BackgroundWithControls({ children }: { children: ReactNo
             <div className="flex justify-between h-16 items-center">
               <Link href="/" className="text-xl font-bold text-indigo-600">Guy Ginat</Link>
               <div className="flex space-x-4">
-                <Link href="/" className="nav-link">Home</Link>
-                <Link href="/games" className="nav-link">Games</Link>
-                <Link href="/tech" className="nav-link">Tech & Code</Link>
-                <Link href="/writing" className="nav-link">Game Design</Link>
-                <Link href="/contact" className="nav-link">Contact</Link>
+                <Link href="/" className="nav-link text-gray-200">Home</Link>
+                <Link href="/games" className="nav-link text-gray-200">Games</Link>
+                <Link href="/tech" className="nav-link text-gray-200">Other</Link>
+                {/* <Link href="/writing" className="nav-link">Game Design</Link> */}
+                <Link href="/contact" className="nav-link text-gray-200">Contact</Link>
               </div>
             </div>
           </div>

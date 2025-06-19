@@ -1,4 +1,5 @@
 import { games } from "@/data/games";
+import { towerContent } from "@/data/tower-content";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -8,6 +9,34 @@ export default function GamesPage() {
       <div className="container-custom py-12">
         <h1 className="section-title">Game Projects</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <Link
+              key={"tower"}
+              href={`/tower`}
+              className="card group transform hover:-translate-y-1 transition-all duration-200"
+            >
+              <div className="aspect-video bg-gray-100 rounded-lg mb-4 overflow-hidden flex items-center justify-center">
+                <Image
+                  src={"/images/tower/TowerBgSm.png"}
+                  alt={"Tower"}
+                  width={400}
+                  height={225}
+                  className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-200"
+                />
+              </div>
+              <h3 className="text-xl font-semibold mb-2 group-hover:text-indigo-600 transition-colors">{"Tower"}</h3>
+              <p className="text-gray-600 mb-4">{"Tower is an exploratory project looking into systems, grid and game design."}</p>
+              <div className="flex gap-2 flex-wrap">                
+                  <span key={"Grid"} className="tag bg-red-100 text-red-800">
+                    {"MFA Thesis Project"}
+                  </span> 
+                  <span key={"Systems"} className="tag bg-blue-100 text-blue-800">
+                    {"Systems"}
+                  </span> 
+                  <span key={"Systems"} className="tag bg-blue-100 text-blue-800">
+                    {"Systems"}
+                  </span>
+              </div>
+            </Link>
           {games.map((game) => (
             <Link
               key={game.slug}

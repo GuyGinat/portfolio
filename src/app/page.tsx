@@ -9,11 +9,11 @@ export default function Home() {
           <h1 className="text-5xl font-bold mb-6 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
             Technical Game Designer
           </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Hello!<br/> I&apos;m Guy Ginat, a technical game designer. I love making games, tools, web apps, experimenting with new technologies and input devices, and sometimes, I also make some music.
+          <p className="text-xl text-gray-200 max-w-2xl mx-auto">
+            Hello!<br/> I&apos;m Guy Ginat, a technical game designer. I love making games, tools, web apps, experimenting with new technologies and input devices, sometimes, I also make some music.
           </p>
           <br/>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="text-xl text-gray-200 max-w-2xl mx-auto">
             I have previoulsy worked as a mobile games developer and a full stack web developer, I have an MFA in Game Design from the NYU Game Center, and a BSc. in computer science from Reichman University.
           </p>
         </section>
