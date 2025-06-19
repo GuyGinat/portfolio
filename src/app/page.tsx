@@ -7,10 +7,14 @@ export default function Home() {
         {/* Hero Section */}
         <section className="text-center mb-20">
           <h1 className="text-5xl font-bold mb-6 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-            Technical Game Designer & Other Stuff
+            Technical Game Designer
           </h1>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Hello!<br/> I&apos;m Guy Ginat, a technical game designer. I love making games, tools, web apps, and sometimes, I also make some music.
+            Hello!<br/> I&apos;m Guy Ginat, a technical game designer. I love making games, tools, web apps, experimenting with new technologies and input devices, and sometimes, I also make some music.
+          </p>
+          <br/>
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            I have previoulsy worked as a mobile games developer and a full stack web developer, I have an MFA in Game Design from the NYU Game Center, and a BSc. in computer science from Reichman University.
           </p>
         </section>
 
@@ -39,7 +43,7 @@ export default function Home() {
             </div>
             <h2 className="text-2xl font-semibold mb-4 group-hover:text-blue-600 transition-colors">Other</h2>
             <p className="text-gray-600">
-              Browse through code snippets and technical implementations
+              Browse through code snippets and technical implementations of tools I have made
             </p>
           </Link>
 
