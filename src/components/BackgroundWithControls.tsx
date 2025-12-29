@@ -215,7 +215,7 @@ export default function BackgroundWithControls({ children }: { children: ReactNo
               <div className="flex space-x-4">
                 <Link href="/" className="nav-link text-gray-200">Home</Link>
                 <Link href="/games" className="nav-link text-gray-200">Games</Link>
-                <Link href="/tech" className="nav-link text-gray-200">Other</Link>
+                <Link href="/tech" className="nav-link text-gray-200">Tools & Tech</Link>
                 {/* <Link href="/writing" className="nav-link">Game Design</Link> */}
                 <Link href="/contact" className="nav-link text-gray-200">Contact</Link>
               </div>
