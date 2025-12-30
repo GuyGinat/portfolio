@@ -16,6 +16,11 @@
   --primary-color: 79, 70, 229;
   --primary-hover: 67, 56, 202;
   --secondary-color: 236, 238, 254;
+  --section-gap: 4rem;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {

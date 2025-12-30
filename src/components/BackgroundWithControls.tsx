@@ -1,11 +1,12 @@
 "use client";
 import { useState, useEffect, useRef, ReactNode } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import ThreeBackground from "./ThreeBackground";
 import ControlPanel from "./ControlPanel";
-import Link from "next/link";
 import { BackgroundConfig, backgroundConfigMaps } from "@/data/backgroundConfig";
 import { linear } from "@/data/easingFunctions";
 import { GRID_SIZE_X, GRID_SIZE_Y } from "./ThreeBackground";
+import { useScrollBackground } from "@/hooks/useScrollBackground";
 
 const DEFAULT_COLOR1 = "#eeeeee";
 const DEFAULT_COLOR2 = "#eeeeee";
@@ -40,6 +41,8 @@ function tweenOpacity(
 }
 
 export default function BackgroundWithControls({ children }: { children: ReactNode }) {
+  const pathname = usePathname();
+  const router = useRouter();
   const [color1, setColor1] = useState(DEFAULT_COLOR1);
   const [color2, setColor2] = useState(DEFAULT_COLOR2);
   const [lightPosition, setLightPosition] = useState<[number, number, number]>(DEFAULT_LIGHT_POSITION);
@@ -56,6 +59,10 @@ export default function BackgroundWithControls({ children }: { children: ReactNo
   const [nextConfig, setNextConfig] = useState<BackgroundConfig>(backgroundConfigMaps["start"]);
   const [opacity, setOpacity] = useState(0);
   const [finishedIntro, setFinishedIntro] = useState(false);
+
+  // Use scroll-based background hook (only on home page)
+  const isHomePage = pathname === '/';
+  const { currentConfig: scrollConfig } = useScrollBackground();
 
   useEffect(() => {
     // set the custom cube offsets to x:0 y:0 for all cubes
@@ -76,11 +83,6 @@ export default function BackgroundWithControls({ children }: { children: ReactNo
   const showMainTween = () => {
     setShowMainState(true);
     tweenOpacity(opacity, 90, 1000, setOpacity);
-  };
-  const hideMainTween = () => {
-    tweenOpacity(opacity, 0, 1000, setOpacity, () => {
-      setShowMainState(false);
-    });
   };
 
   const handleSetCubeColor = (gridX: number, gridY: number, color1: string, color2: string) => {
@@ -108,6 +110,75 @@ export default function BackgroundWithControls({ children }: { children: ReactNo
 
   const writeTextRef = useRef<{ writeText: (text: string, x: number, y: number, c1: string, c2: string) => void }>(null);
 
+  // Track if update is from scroll
+  const [isScrollUpdate, setIsScrollUpdate] = useState(false);
+  
+  // Handle pathname-based background config (for game/tech detail pages)
+  useEffect(() => {
+    if (finishedIntro && !isHomePage) {
+      // Apply different configs based on route
+      if (pathname.startsWith('/games/')) {
+        setNextConfig(backgroundConfigMaps["games"]);
+      } else if (pathname.startsWith('/tech/')) {
+        setNextConfig(backgroundConfigMaps["tech"]);
+      } else if (pathname === '/tower') {
+        setNextConfig(backgroundConfigMaps["games"]);
+      }
+    }
+  }, [pathname, finishedIntro, isHomePage]);
+  
+  // Handle hash navigation on page load (when navigating from another page with hash)
+  useEffect(() => {
+    if (isHomePage && finishedIntro && window.location.hash) {
+      const hash = window.location.hash.substring(1); // Remove the #
+      setTimeout(() => {
+        const element = document.getElementById(hash);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 300);
+    }
+  }, [isHomePage, finishedIntro]);
+  
+  // Update background when scroll config changes (only on home page, after intro is finished)
+  useEffect(() => {
+    if (finishedIntro && isHomePage && scrollConfig) {
+      setIsScrollUpdate(true);
+      setNextConfig(scrollConfig);
+      // Keep flag active - don't reset it, let it stay true for scroll updates
+    }
+  }, [scrollConfig, finishedIntro, isHomePage]);
+  
+  // Helper function to handle navigation with scroll
+  const handleNavClick = (sectionId: string, e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    if (pathname !== '/') {
+      // If not on home page, navigate to home first
+      router.push('/');
+      // Wait for navigation to complete, then scroll to section
+      setTimeout(() => {
+        const element = document.getElementById(sectionId);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        } else {
+          // If element not found yet, try again after a bit more time
+          setTimeout(() => {
+            const element = document.getElementById(sectionId);
+            if (element) {
+              element.scrollIntoView({ behavior: 'smooth' });
+            }
+          }, 200);
+        }
+      }, 300);
+    } else {
+      // Already on home page, just scroll
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  };
+
   useEffect(() => {
     const hasVisited = localStorage.getItem('hasVisited');
     
@@ -116,7 +187,6 @@ export default function BackgroundWithControls({ children }: { children: ReactNo
       localStorage.setItem('hasVisited', 'true');
     } else {
       showMainTween();
-      // setNextConfig(backgroundConfigMaps["base"]);
       setFinishedIntro(true);
     }
 
@@ -154,6 +224,7 @@ export default function BackgroundWithControls({ children }: { children: ReactNo
         setFinishedIntro(true);
       }, 35000);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -206,18 +277,48 @@ export default function BackgroundWithControls({ children }: { children: ReactNo
         ref={writeTextRef}
         finishedIntro={finishedIntro}
         setFinishedIntro={setFinishedIntro}
+        isScrollUpdate={isScrollUpdate}
       />
       {showMain && (
         <nav className="fixed top-0 w-full backdrop-blur-sm border-b border-gray-200/20 z-50" style={{ opacity: opacity / 100 }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between h-16 items-center">
-              <Link href="/" className="text-xl font-bold text-indigo-600">Guy Ginat</Link>
+              <a 
+                href="/#hero" 
+                className="text-xl font-bold text-indigo-600 cursor-pointer"
+                onClick={(e) => handleNavClick('hero', e)}
+              >
+                Guy Ginat
+              </a>
               <div className="flex space-x-4">
-                <Link href="/" className="nav-link text-gray-200">Home</Link>
-                <Link href="/games" className="nav-link text-gray-200">Games</Link>
-                <Link href="/tech" className="nav-link text-gray-200">Other</Link>
-                {/* <Link href="/writing" className="nav-link">Game Design</Link> */}
-                <Link href="/contact" className="nav-link text-gray-200">Contact</Link>
+                <a 
+                  href="/#hero" 
+                  className="nav-link text-gray-200 cursor-pointer"
+                  onClick={(e) => handleNavClick('hero', e)}
+                >
+                  Home
+                </a>
+                <a 
+                  href="/#games" 
+                  className="nav-link text-gray-200 cursor-pointer"
+                  onClick={(e) => handleNavClick('games', e)}
+                >
+                  Games
+                </a>
+                <a 
+                  href="/#tech" 
+                  className="nav-link text-gray-200 cursor-pointer"
+                  onClick={(e) => handleNavClick('tech', e)}
+                >
+                  Tech & Tools
+                </a>
+                <a 
+                  href="/#contact" 
+                  className="nav-link text-gray-200 cursor-pointer"
+                  onClick={(e) => handleNavClick('contact', e)}
+                >
+                  Contact
+                </a>
               </div>
             </div>
           </div>

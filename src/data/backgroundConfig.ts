@@ -33,7 +33,7 @@ export const defaultBackgroundConfig: BackgroundConfig = {
     customColorsMap: null,    
     spacingOffset: 0,
     delayType: "cto",
-    delay: 100,
+    delay: 0,
 }
 
 export function createBackgroundConfig(config: Partial<BackgroundConfig>): BackgroundConfig {
@@ -42,6 +42,16 @@ export function createBackgroundConfig(config: Partial<BackgroundConfig>): Backg
         ...config,
     }
 }
+
+// Scroll percentage breakpoints for background transitions
+// Maps scroll percentage (0-100) to background config names
+export const scrollBreakpoints: Record<number, string> = {
+    0: "base",
+    25: "games",
+    50: "tech",
+    75: "contact",
+    100: "beach",
+};
 
 export const backgroundConfigMaps: Record<string, BackgroundConfig> = {
     "default": defaultBackgroundConfig,
@@ -57,7 +67,7 @@ export const backgroundConfigMaps: Record<string, BackgroundConfig> = {
         spacingOffset: 0.1,
         customColorsMap: null,
         delayType: "ltr",
-        delay: 100,
+        delay: 0,
     }),
     "start": createBackgroundConfig({
         color1: "#eeeeee",
@@ -67,7 +77,7 @@ export const backgroundConfigMaps: Record<string, BackgroundConfig> = {
         waveSpeed: 0,        
         spacingOffset: 0,
         delayType: "cto",
-        delay: 100,
+        delay: 0,
     }),
     "purple": createBackgroundConfig({
         color1: "#4338ca",
@@ -81,7 +91,7 @@ export const backgroundConfigMaps: Record<string, BackgroundConfig> = {
         spacingOffset: 0.1,
         customColorsMap: null,
         delayType: "rtl",
-        delay: 100,
+        delay: 0,
     }),
     "beach": createBackgroundConfig({
         color1: "#abcdef",
@@ -103,7 +113,7 @@ export const backgroundConfigMaps: Record<string, BackgroundConfig> = {
         cameraFov: 80,
         spacingOffset: 0.3,
         delayType: "rtl",
-        delay: 100,
+        delay: 0,
     }),
     "games": createBackgroundConfig({
         color1: "#123456",
@@ -116,7 +126,7 @@ export const backgroundConfigMaps: Record<string, BackgroundConfig> = {
         cameraFov: 80,
         spacingOffset: 0.3,
         delayType: "rtl",
-        delay: 10,
+        delay: 0,
     }),
     "about": createBackgroundConfig({
         color1: "#abcdef",
@@ -129,7 +139,7 @@ export const backgroundConfigMaps: Record<string, BackgroundConfig> = {
         cameraFov: 80,
         spacingOffset: 2,
         delayType: "utd",
-        delay: 10,
+        delay: 0,
     }),
     "writing": createBackgroundConfig({
         color1: "#eeeeee",
@@ -140,7 +150,7 @@ export const backgroundConfigMaps: Record<string, BackgroundConfig> = {
         waveSpeed: -4.5,
         spacingOffset: -0.1,
         delayType: "ltr",
-        delay: 10,
+        delay: 0,
     }),
     "tech": createBackgroundConfig({
         color1: "#abcdef",
@@ -150,6 +160,6 @@ export const backgroundConfigMaps: Record<string, BackgroundConfig> = {
         waveFrequency: 0.1,
         waveSpeed: -1.5,
         delayType: "ltr",
-        delay: 10,
+        delay: 0,
     }),
 }
