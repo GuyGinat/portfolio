@@ -52,6 +52,25 @@ export default function GamePage({ params }: GamePageProps) {
           />
         )}      
       </div>
+      ) : game.externalUrl ? (
+        <div className="w-full max-w-6xl aspect-video bg-slate-200 rounded-lg rounded-b-none overflow-hidden shadow-lg p-2">
+          <div 
+            className="w-full h-full min-h-[400px] flex items-center justify-center relative"
+            style={{
+              backgroundImage: `url(${game.thumbnail})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center'
+            }}
+          >
+            <iframe
+            src={game.externalUrl}
+            title={game.title}
+            className="w-full h-full min-h-[400px]"
+            allowFullScreen
+          />
+              
+          </div>
+        </div>
       ) : (
         <div className="w-full max-w-6xl bg-slate-200 rounded-lg rounded-b-none overflow-hidden shadow-lg p-2"></div>
       )}

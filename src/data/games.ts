@@ -7,6 +7,7 @@ export type Game = {
   tags: string[];
   thumbnail: string;
   buildUrl?: string;
+  externalUrl?: string;
   content?: ContentBlock[];  // Optional array of content blocks
 };
 
@@ -168,6 +169,36 @@ export const games: Game[] = [
         minHeight: 275,
         minWidth: 200,
       }
+    ]
+  }, 
+  {
+    slug: "intergalactic",
+    title: "Intergalactic Animal Control",
+    description: "A keyboard only game where you traverse a gauntlet of keyboard maneuvers.",
+    tags: ["Puzzle", ],
+    thumbnail: "/games/intergalactic/intergalactic.png",
+    buildUrl: "/games/intergalactic/index.html",
+    content: [      
+      {
+        type: "text",
+        content: "My submission to the 2025 Thinky Puzzle Game Jam.\nIn this puzzle game you are tasked with helping transport lost space animals back to their home planet by putting them in a cargo container (it's fine they have food there, it's kind of like a pokeball) and moving them from planet to planet.\n\nWhat's the catch? Each time you move them they have new requests about how they like to be put in the cargo container.\nAll the rules about how to place them are chosen randomly from a list of premade rules so if things don't end up working you can try again!",
+        style: textStyle
+      },
+    ]
+  },  
+  {
+    slug: "massivesweeper",
+    title: "Massivesweeper",
+    description: "Huge multiplayer version of Minesweeper.",
+    tags: ["Puzzle", "Multiplayer"],
+    thumbnail: "/games/massivesweeper/massivesweeper.png",
+    externalUrl: "https://massive-sweeper-front.vercel.app/",
+    content: [      
+      {
+        type: "text",
+        content: "Massive Sweeper is a collaborative twist on the classic Minesweeper.\nWork together (or chaotically) to clear an 800 × 600 grid - every move updates live for everyone who plays.\nPlay right here on the page, or open it in a new tab: massive-sweeper-front.vercel.app.",
+        style: textStyle
+      },
     ]
   },  
   // Add more games here

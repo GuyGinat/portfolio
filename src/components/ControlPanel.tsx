@@ -3,8 +3,7 @@ import { GRID_SIZE_X, GRID_SIZE_Y } from './ThreeBackground';
 import Tween from '@tweenjs/tween.js';
 import { useColorTween, useOffsetTween } from '../hooks/useColorTween';
 import { tinyFont } from '@/data/tinyFont';
-import { usePathname } from 'next/navigation';
-import { BackgroundConfig, backgroundConfigMaps } from '@/data/backgroundConfig';
+import { BackgroundConfig } from '@/data/backgroundConfig';
 
 interface ControlPanelProps {
   onColor1Change: (color: string) => void;
@@ -40,6 +39,7 @@ interface ControlPanelProps {
   setWaveSpeed: (value: number) => void;
   finishedIntro: boolean;
   setFinishedIntro: (value: boolean) => void;
+  isScrollUpdate?: boolean;
 }
 
 // Helper for drag-to-change
@@ -78,6 +78,21 @@ function useDragNumber(value: number, setValue: (v: number) => void, step = 0.1)
 
 type TabType = 'colors' | 'wave' | 'camera' | 'light' | 'offsets';
 
+// Helper function to interpolate colors
+function lerpColor(color1: string, color2: string, t: number) {
+  const r1 = parseInt(color1.slice(1, 3), 16);
+  const g1 = parseInt(color1.slice(3, 5), 16);
+  const b1 = parseInt(color1.slice(5, 7), 16);
+  const r2 = parseInt(color2.slice(1, 3), 16);
+  const g2 = parseInt(color2.slice(3, 5), 16);
+  const b2 = parseInt(color2.slice(5, 7), 16);
+  const r = Math.round(r1 + (r2 - r1) * t);
+  const g = Math.round(g1 + (g2 - g1) * t);
+  const b = Math.round(b1 + (b2 - b1) * t);
+  const toHex = (n: number) => n.toString(16).padStart(2, '0');
+  return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+}
+
 // Add this custom hook at the top level of the file, before the ControlPanel component
 function useBackgroundTween() {
   const [isTweening, setIsTweening] = useState(false);
@@ -103,8 +118,8 @@ function useBackgroundTween() {
         [0, 1, 2].map(i => lerp(a[i], b[i])) as [number, number, number];
 
       const result: BackgroundConfig = {
-        color1: from.color1,
-        color2: from.color2,
+        color1: lerpColor(from.color1, to.color1, t),
+        color2: lerpColor(from.color2, to.color2, t),
         lightPosition: lerpVec3(from.lightPosition, to.lightPosition),
         waveAmplitude: lerp(from.waveAmplitude, to.waveAmplitude),
         waveFrequency: lerp(from.waveFrequency, to.waveFrequency),
@@ -112,9 +127,9 @@ function useBackgroundTween() {
         cameraPosition: lerpVec3(from.cameraPosition, to.cameraPosition),
         cameraFov: lerp(from.cameraFov, to.cameraFov),
         spacingOffset: lerp(from.spacingOffset, to.spacingOffset),
-        customColorsMap: from.customColorsMap,
-        delayType: to.delayType,
-        delay: to.delay
+        customColorsMap: t < 0.5 ? from.customColorsMap : to.customColorsMap,
+        delayType: t < 0.5 ? from.delayType : to.delayType,
+        delay: lerp(from.delay || 0, to.delay || 0),
       };
 
       onUpdate(result);
@@ -172,6 +187,7 @@ function ControlPanel({
   setWaveSpeed,
   finishedIntro,
   setFinishedIntro,
+  isScrollUpdate = false,
 }: ControlPanelProps, ref: React.Ref<{ writeText: (text: string, x: number, y: number, c1: string, c2: string) => void }>) {
   const [isOpen, setIsOpen] = useState(false);
   const [color1, setColor1] = useState(initialColor1);
@@ -187,21 +203,11 @@ function ControlPanel({
   const [activeTab, setActiveTab] = useState<TabType>('colors');
   const { tweenCubeColors } = useColorTween();
   const { tweenCubeOffsets } = useOffsetTween();
-  const pathname = usePathname();  
   const { tweenConfig } = useBackgroundTween();
 
   useEffect(() => {
-    const segments = pathname.split("/").filter(Boolean);
-    console.log(segments);
-    const config = backgroundConfigMaps[segments[0]] || (finishedIntro ? backgroundConfigMaps["base"] : backgroundConfigMaps["default"]);
-    if (config) {
-      setBackgroundConfig(config);
-    }
-  }, [pathname]);
-
-  useEffect(() => {
-    setBackgroundConfig(nextConfig);
-  }, [nextConfig]);
+    setBackgroundConfig(nextConfig, isScrollUpdate);
+  }, [nextConfig, isScrollUpdate]);
 
   // Drag controls for camera
   const camX = useDragNumber(cameraPosition[0], v => setCameraPosition([v, cameraPosition[1], cameraPosition[2]]));
@@ -239,9 +245,35 @@ function ControlPanel({
     setCameraFov(parseFloat(e.target.value));
   };
 
-  const setBackgroundConfig = (config: BackgroundConfig) => {
-    if (config === currentConfig) return;
+  const setBackgroundConfig = (config: BackgroundConfig, skipCubeColors: boolean = false) => {
+    if (config === currentConfig && !skipCubeColors) return;
+    
+    // For scroll-driven updates, directly apply values without tweening
+    // since the scroll hook already provides smoothly interpolated values
+    if (skipCubeColors) {
+      // Directly set all values immediately
+      setLight(config.lightPosition);
+      setSpacingOffset(config.spacingOffset);
+      setWaveAmplitude(config.waveAmplitude);
+      setWaveFrequency(config.waveFrequency);
+      setWaveSpeed(config.waveSpeed);
+      setCameraPosition(config.cameraPosition);
+      setCameraFov(config.cameraFov);
+      
+      // Update all cube colors immediately
+      for (let x = 0; x < GRID_SIZE_X; x++) {
+        for (let y = 0; y < GRID_SIZE_Y; y++) {
+          setCustomCubeColor(x, y, config.color1, config.color2);
+        }
+      }
+      
+      setCurrentConfig(config);
+      return; // Skip tweening for scroll updates
+    }
+    
+    // For non-scroll updates, use the tween system
     lerpAllCubesToColors(config.color1, config.color2, config.delay || 100, config.delayType || "rtl");
+    
     tweenConfig(currentConfig, config, 1000, (newConfig) => {      
       setLight(newConfig.lightPosition);
       setSpacingOffset(newConfig.spacingOffset);
