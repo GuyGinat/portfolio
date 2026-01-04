@@ -182,7 +182,7 @@ export default function BackgroundWithControls({ children }: { children: ReactNo
   useEffect(() => {
     const hasVisited = localStorage.getItem('hasVisited');
     
-    if (!hasVisited) {
+    if (false) {
       screenLoadSequence();
       localStorage.setItem('hasVisited', 'true');
     } else {
