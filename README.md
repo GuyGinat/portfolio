@@ -1,37 +1,22 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# guyginat.xyz
 
-## Getting Started
+Portfolio of Guy Ginat, game developer and technical director. Next.js 14 (app router), Tailwind, react-three-fiber. Deployed on Vercel from `main`.
 
-First, run the development server:
+## Run
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev     # http://localhost:3000
+npm run build   # production build, also type-checks
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Where things live
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Copy:** `CONTENT.md` is the source of truth for all text on the site, LinkedIn and the résumé. Edit it first, then the data files.
+- **Data:** `src/data/site.ts` (profile, experience, tools), `src/data/work.ts` (case studies), `src/data/games.ts` (Lab), `src/data/techs.ts` (tool pages), `src/data/tower-content.ts` (Tower essay blocks).
+- **Background:** `src/components/background/`. One `InstancedMesh` animated in `useFrame`; all state lives in the mutable store `src/lib/bgStore.ts`, so nothing re-renders React per frame. Page sections switch the mood through `MoodSection`; work cards tint the grid on hover. `GridPanel` is the easter-egg control panel.
+- **Media:** `public/media/` holds web-encoded video (H.264, no audio) and posters. Unity WebGL builds for the Lab live under `public/games/`.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Redirects
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-# portfolio
+Old URLs from earlier résumés (`/tower`, `/games/*`, `/tech/*`) redirect to their new homes; see `next.config.js`.

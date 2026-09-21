@@ -22,7 +22,7 @@ export const games: Game[] = [
   {
     slug: "belgrad",
     title: "Belgrad Park",
-    description: "An experimental time looping horror game made in Unity.",
+    description: "A real-time horror game trapped in a five-minute time loop.",
     tags: ["First Person", "Horror", "Puzzle", "Experimental"],
     thumbnail: "/images/belgrad/belgrad-cover.png",
     // buildUrl: "/games/spinning-roles/index.html",
@@ -41,7 +41,7 @@ export const games: Game[] = [
       },
       {
         type: "text",
-        content: "The game was made in collaboration with the incredibley talented Amanda and Oyku!",
+        content: "The game was made in collaboration with the incredibly talented Amanda and Oyku!",
         style: textStyle,
         links: [
           {
@@ -70,14 +70,14 @@ export const games: Game[] = [
   {
     slug: "spinning-roles",
     title: "Spinning Roles",
-    description: "Physics based 3D puzzle game.",
+    description: "A gravity puzzle about what happens while the die rolls.",
     tags: ["Physics", "Puzzle"],
     thumbnail: "/games/spinning-roles/thumb.jpg",
     buildUrl: "/games/spinning-roles/index.html",
     content: [
       {
         type: "text",
-        content: "Spinning Roles is my submission to the 2022 GMTK Game Jam.\nBuilt around the theme of Roll Of The Dice.\n\nI wanted to build a game that does not use the classical definition of a dice, utilizing mechanics of randomness, but rather focus on what happens when the dice rolls, resulting in a gravity based 3D puzzle game",
+        content: "Made for the 2022 GMTK Game Jam, around the theme Roll of the Dice.\n\nInstead of using dice for randomness, I wanted to focus on what happens while the die is rolling, which turned into a gravity-based 3D puzzle game.",
         style: textStyle
       },
       {
@@ -100,14 +100,14 @@ export const games: Game[] = [
   {
     slug: "jjj",
     title: "Jiggle Jaggle Juggling",
-    description: "A simulation of juggling physics and cognitive overload.",
+    description: "Juggling physics and the cognitive overload that comes with it.",
     tags: ["Physics", "Juggling"],
     thumbnail: "/games/jjj/jjj-cover.jpg",
     buildUrl: "/games/jjj/index.html",
     content: [
       {
         type: "text",
-        content: "Trying to simulate the physics of real life juggling, I built this game in an attempt to try an make an accurate representation of the hand movement and cognitive overload of juggling.\n\nMy advice when playing this (also when juggling) is to try and release balls at the peak of the height of the ball that is currently in the air, other then that this is just very hard, like juggling!",
+        content: "I built this to make an accurate representation of the hand movement and cognitive overload of juggling.\n\nMy advice when playing this (also when juggling) is to try and release balls at the peak of the height of the ball that is currently in the air, other than that, this is just very hard, like juggling!",
         style: textStyle
       },
       
@@ -116,15 +116,15 @@ export const games: Game[] = [
   {
     slug: "pusher",
     title: "Pusher",
-    description: "Small split screen multiplayer game.",
+    description: "Same-screen multiplayer with one player on keyboard, one on a controller.",
     tags: ["Multiplayer"],
     thumbnail: "/games/pusher/Pusher.png",
     buildUrl: "/games/pusher/index.html",
     content: [
       {
         type: "text",
-        // content: "Pusher is an experiment with same screen multiplayer with different control schemes, I wanted to make a game that you can pick up and play with a friend without any learning curve, trying to make it as polished as possible within a small time frame.\n\nTry playing the game with one player on a keyboard and the other with a controller (you can also do whatever 2 control schemes you want)",
-        content: "Pusher is an experiment with same screen multiplayer with different control schemes, I wanted to make a game that you can pick up and play with a friend without any learning curve, trying to make it as polished as possible within a small time frame.\n\nPlay the game with one player on a keyboard and the other with a controller",
+        // content: "Pusher is an experiment in same-screen multiplayer with different control schemes. I wanted to make a game that you can pick up and play with a friend without any learning curve, trying to make it as polished as possible within a small time frame.\n\nTry playing the game with one player on a keyboard and the other with a controller (you can also do whatever 2 control schemes you want)",
+        content: "Pusher is an experiment in same-screen multiplayer with different control schemes. I wanted to make a game that you can pick up and play with a friend without any learning curve, trying to make it as polished as possible within a small time frame.\n\nPlay the game with one player on a keyboard and the other with a controller",
         style: textStyle
       },
       
@@ -133,14 +133,14 @@ export const games: Game[] = [
   {
     slug: "berto",
     title: "Berto",
-    description: "A keyboard only game where you traverse a gauntlet of keyboard maneuvers.",
+    description: "A rage game played across the whole keyboard.",
     tags: ["Rage", "Keyboard Only", "Sort of Typing"],
     thumbnail: "/games/berto/berto.jpg",
     buildUrl: "/games/berto/index.html",
     content: [
       {
         type: "text",
-        content: "Note: This game was made a couple of years ago and the unity web build from that time broke the build a bit, here is an itch windows build if you want to experience it as intended, but if you just want to see the mechanic in the game the web build is playable and functional",
+        content: "The web build of this older project has a few rendering issues. For the intended experience, grab the Windows build on itch",
         style: {...textStyle, backgroundColor: '#552222', textColor: 'white'},
         links: [
           {
@@ -157,7 +157,7 @@ export const games: Game[] = [
       {
         type: "image",
         url: "/images/berto/berto1.png",
-        alt: "Spinning Roles",
+        alt: "Berto",
         sideBySide: true,
         minHeight: 275,
         minWidth: 200,
@@ -165,7 +165,7 @@ export const games: Game[] = [
       {
         type: "image",
         url: "/images/berto/berto2.png",
-        alt: "Spinning Roles",
+        alt: "Berto",
         minHeight: 275,
         minWidth: 200,
       }
@@ -174,14 +174,14 @@ export const games: Game[] = [
   {
     slug: "intergalactic",
     title: "Intergalactic Animal Control",
-    description: "A keyboard only game where you traverse a gauntlet of keyboard maneuvers.",
-    tags: ["Puzzle", ],
+    description: "Ship space animals home while their packing demands keep changing.",
+    tags: ["Puzzle"],
     thumbnail: "/games/intergalactic/intergalactic.png",
     buildUrl: "/games/intergalactic/index.html",
     content: [      
       {
         type: "text",
-        content: "My submission to the 2025 Thinky Puzzle Game Jam.\nIn this puzzle game you are tasked with helping transport lost space animals back to their home planet by putting them in a cargo container (it's fine they have food there, it's kind of like a pokeball) and moving them from planet to planet.\n\nWhat's the catch? Each time you move them they have new requests about how they like to be put in the cargo container.\nAll the rules about how to place them are chosen randomly from a list of premade rules so if things don't end up working you can try again!",
+        content: "Made for the 2025 Thinky Puzzle Game Jam.\nIn this puzzle game you are tasked with helping transport lost space animals back to their home planet by putting them in a cargo container (it's fine they have food there, it's kind of like a pokeball) and moving them from planet to planet.\n\nWhat's the catch? Each time you move them they have new requests about how they like to be put in the cargo container.\nAll the rules about how to place them are chosen randomly from a list of premade rules so if things don't end up working you can try again!",
         style: textStyle
       },
     ]
@@ -189,14 +189,14 @@ export const games: Game[] = [
   {
     slug: "massivesweeper",
     title: "Massivesweeper",
-    description: "Huge multiplayer version of Minesweeper.",
+    description: "Minesweeper on an 800 by 600 board, shared live with everyone playing.",
     tags: ["Puzzle", "Multiplayer"],
     thumbnail: "/games/massivesweeper/massivesweeper.png",
     externalUrl: "https://massive-sweeper-front.vercel.app/",
     content: [      
       {
         type: "text",
-        content: "Massive Sweeper is a collaborative twist on the classic Minesweeper.\nWork together (or chaotically) to clear an 800 × 600 grid - every move updates live for everyone who plays.\nPlay right here on the page, or open it in a new tab: massive-sweeper-front.vercel.app.",
+        content: "Massive Sweeper is a collaborative twist on the classic Minesweeper.\nWork together (or chaotically) to clear an 800 by 600 grid. Every move updates live for everyone playing.\nPlay it here, or open it in a new tab: massive-sweeper-front.vercel.app.",
         style: textStyle
       },
     ]
