@@ -1,17 +1,29 @@
 import type { Config } from "tailwindcss";
 
+const token = (name: string) => `rgb(var(--${name}) / <alpha-value>)`;
+
 const config: Config = {
   content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
-      }
+        scene: token("scene"),
+        surface: token("surface"),
+        line: token("line"),
+        ink: token("ink"),
+        muted: token("muted"),
+        accent: token("accent"),
+      },
+      fontFamily: {
+        sans: ["var(--font-schibsted)", "system-ui", "sans-serif"],
+      },
+      maxWidth: {
+        page: "76rem",
+        prose: "40rem",
+      },
     },
   },
   plugins: [],

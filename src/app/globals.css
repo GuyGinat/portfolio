@@ -2,77 +2,74 @@
 @tailwind components;
 @tailwind utilities;
 
-@keyframes fade-in {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: none; }
-}
-.animate-fade-in {
-  animation: fade-in 0.25s ease;
-}
-
-  :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-rgb: 0, 0, 0;
-  --primary-color: 79, 70, 229;
-  --primary-hover: 67, 56, 202;
-  --secondary-color: 236, 238, 254;
-  --section-gap: 4rem;
+:root {
+  /* Arcade violet: indigo night with a cyan accent, taken from the CatchUp trailer. */
+  --scene: 21 17 48;     /* #151130 page background */
+  --surface: 31 25 68;   /* #1f1944 reading surfaces */
+  --line: 60 51 115;     /* #3c3373 rules and outlines */
+  --ink: 242 239 252;    /* #f2effc body text */
+  --muted: 168 160 208;  /* #a8a0d0 secondary text */
+  --accent: 63 214 224;  /* #3fd6e0 cyan */
+  color-scheme: dark;
 }
 
 html {
   scroll-behavior: smooth;
+  background: rgb(var(--scene));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: rgb(var(--background-rgb));
-  font-family: Arial, Helvetica, sans-serif;
+  color: rgb(var(--ink));
+  background: transparent;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: rgb(var(--accent));
+  color: rgb(var(--scene));
+}
+
+:focus-visible {
+  outline: 2px solid rgb(var(--accent));
+  outline-offset: 3px;
+  border-radius: 2px;
 }
 
 @layer components {
-  .container-custom {
-    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
-  }
-  
-  .section-title {
-    @apply text-3xl font-bold mb-8 text-gray-300;
-  }
-  
-  .card {
-    @apply bg-white/15 rounded-lg shadow-sm border border-gray-500 p-6 hover:shadow-md transition-all duration-200 hover:border-indigo-100;
-  }
-  
-  .card p {
-    @apply text-gray-400;
+  .type-display { font-weight: 800; letter-spacing: -0.03em; line-height: 0.95; }
+  .type-heading { font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; }
+  .type-title { font-weight: 650; letter-spacing: -0.005em; line-height: 1.25; }
+
+  .page {
+    @apply mx-auto w-full max-w-page px-4 sm:px-8;
   }
 
-  .card h2 {
-    @apply text-gray-300;
+  .link {
+    @apply underline decoration-line underline-offset-4 transition-colors hover:decoration-accent hover:text-ink;
   }
 
-  .card h3 {
-    @apply text-gray-300;
+  .btn {
+    @apply inline-flex items-center gap-2 rounded-md border border-line bg-surface/70 px-4 py-2 font-medium text-ink backdrop-blur transition-colors hover:border-accent;
   }
-
-  .nav-link {
-    @apply text-gray-600 hover:text-indigo-600 px-4 py-2 rounded-md transition-colors duration-200;
-  }
-
-  .nav-link-active {
-    @apply text-indigo-600 bg-indigo-50;
-  }
-
   .btn-primary {
-    @apply bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors duration-200;
+    @apply inline-flex items-center gap-2 rounded-md bg-accent px-4 py-2 font-semibold text-scene transition-colors hover:bg-ink;
   }
 
-  .tag {
-    @apply px-3 py-1 rounded-full text-sm font-medium;
+  /* Long-form text inside case studies. */
+  .prose-case p { @apply mb-4 max-w-prose text-ink/90; }
+  .prose-case h2 { @apply type-heading mb-4 mt-14 text-2xl text-ink; }
+  .prose-case h3 { @apply type-title mb-2 mt-8 text-lg text-ink; }
+  .prose-case ul { @apply mb-4 max-w-prose space-y-3; }
+  .prose-case li { @apply relative pl-5 text-ink/90; }
+  .prose-case li::before {
+    content: "";
+    @apply absolute left-0 top-[0.7em] h-1.5 w-1.5 bg-accent;
   }
-}
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+  .prose-case strong { @apply font-semibold text-ink; }
 }

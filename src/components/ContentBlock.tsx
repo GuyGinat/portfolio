@@ -1,338 +1,175 @@
 "use client";
 import Image from "next/image";
 import type { ContentBlock as ContentBlockType } from "@/types/content";
+import dynamic from "next/dynamic";
 import { useState } from "react";
-import { CodeBlock } from "./CodeBlock";
+
+// The syntax highlighter is heavy and only a few pages show code.
+const CodeBlock = dynamic(() => import("./CodeBlock").then((m) => m.CodeBlock), { ssr: false });
 
 interface ContentBlockProps {
   block: ContentBlockType;
   isSideBySide?: boolean;
 }
 
-export function ContentBlock({ block, isSideBySide = false }: ContentBlockProps) {
-  const [isBuildLoaded, setIsBuildLoaded] = useState(false);
+// Older content marks callouts with a dark red background; everything else
+// renders as plain text on the page surface.
+const isCallout = (block: ContentBlockType) =>
+  !!block.style?.backgroundColor && block.style.backgroundColor !== "white";
 
-  const getBlockStyles = () => {
-    const styles: React.CSSProperties = {};
-    if (block.style) {
-      if (block.style.backgroundColor) styles.backgroundColor = block.style.backgroundColor;
-      if (block.style.textColor) styles.color = block.style.textColor;
-      if (block.style.marginTop) styles.marginTop = `${block.style.marginTop}px`;
-      if (block.style.marginBottom) styles.marginBottom = `${block.style.marginBottom}px`;
-      if (block.style.marginLeft) styles.marginLeft = `${block.style.marginLeft}px`;
-      if (block.style.marginRight) styles.marginRight = `${block.style.marginRight}px`;
-      if (block.style.padding) styles.padding = `${block.style.padding}px`;
-      if (block.style.borderRadius) styles.borderRadius = `${block.style.borderRadius}px`;
-      if (block.style.fontWeight) styles.fontWeight = block.style.fontWeight;
-      if (block.style.fontSize) styles.fontSize = block.style.fontSize;
-      if (block.style.width) styles.width = block.style.width;
-      if (block.style.height) styles.height = block.style.height;
-      if (isSideBySide && block.style.flexBasis) styles.flexBasis = block.style.flexBasis;
-    }
-    return styles;
-  };
+function Caption({ text }: { text?: string }) {
+  if (!text) return null;
+  return <p className="mt-2 text-sm text-muted">{text}</p>;
+}
 
-  const renderTextWithLinks = (text: string, links?: ContentBlockType['links']) => {
-    if (!links || links.length === 0) return <>{text}</>;
-
-    const parts: (string | JSX.Element)[] = [];
-    let lastIndex = 0;
-
-    links.forEach((link, index) => {
-      const linkIndex = text.indexOf(link.text, lastIndex);
-      if (linkIndex === -1) return;
-
-      // Add text before the link
-      if (linkIndex > lastIndex) {
-        parts.push(text.slice(lastIndex, linkIndex));
-      }
-
-      // Add the link
-      const linkElement = link.isDownload ? (
-        <a
-          key={index}
-          href={link.url}
-          download={link.fileName}
-          className="text-blue-600 hover:text-blue-800 underline"
-        >
-          {link.text}
-        </a>
+function TextWithLinks({ text, links }: { text: string; links?: ContentBlockType["links"] }) {
+  if (!links || links.length === 0) return <>{text}</>;
+  const parts: (string | JSX.Element)[] = [];
+  let last = 0;
+  links.forEach((link, i) => {
+    const at = text.indexOf(link.text, last);
+    if (at === -1) return;
+    if (at > last) parts.push(text.slice(last, at));
+    parts.push(
+      link.isDownload ? (
+        <a key={i} href={link.url} download={link.fileName} className="link text-ink">{link.text}</a>
       ) : (
-        <a
-          key={index}
-          href={link.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-blue-600 hover:text-blue-800 underline"
-        >
-          {link.text}
-        </a>
-      );
-      parts.push(linkElement);
+        <a key={i} href={link.url} target="_blank" rel="noopener noreferrer" className="link text-ink">{link.text}</a>
+      ),
+    );
+    last = at + link.text.length;
+  });
+  if (last < text.length) parts.push(text.slice(last));
+  return <>{parts}</>;
+}
 
-      lastIndex = linkIndex + link.text.length;
-    });
+function Build({ block }: { block: ContentBlockType }) {
+  const [loaded, setLoaded] = useState(false);
+  const box = { minHeight: block.minHeight ?? 420, maxHeight: block.maxHeight };
+  return (
+    <figure className="mb-10">
+      <div className="relative w-full overflow-hidden rounded-md border border-line bg-scene" style={box}>
+        {loaded ? (
+          <>
+            <iframe
+              src={block.url}
+              title={block.referenceText || block.alt || "Playable build"}
+              className="absolute inset-0 h-full w-full"
+              allow="autoplay; fullscreen; gamepad"
+              allowFullScreen
+            />
+            <button onClick={() => setLoaded(false)} className="btn absolute right-3 top-3 text-sm">
+              Stop
+            </button>
+          </>
+        ) : (
+          <div
+            className="absolute inset-0 flex items-center justify-center bg-cover bg-center"
+            style={{ backgroundImage: `url(${block.thumbnail || "/images/tower/tower.png"})` }}
+          >
+            <div className="absolute inset-0 bg-scene/60" />
+            <button onClick={() => setLoaded(true)} className="btn-primary relative">
+              Play {block.referenceText || "the build"}
+            </button>
+          </div>
+        )}
+      </div>
+      <Caption text={loaded ? "Runs best on a desktop browser, full screen." : undefined} />
+    </figure>
+  );
+}
 
-    // Add remaining text
-    if (lastIndex < text.length) {
-      parts.push(text.slice(lastIndex));
-    }
-
-    return <>{parts}</>;
-  };
+export function ContentBlock({ block, isSideBySide = false }: ContentBlockProps) {
+  const flex = isSideBySide ? "flex-1 min-w-0" : "";
+  const spacing: React.CSSProperties = {};
+  if (block.style?.marginTop && block.style.marginTop > 40) spacing.marginTop = "3rem";
 
   switch (block.type) {
-    case 'text':
+    case "text":
+      if (isCallout(block)) {
+        return (
+          <div className={`mb-8 rounded-md border-l-2 border-accent bg-surface/90 p-4 ${flex}`} style={spacing}>
+            <p className="whitespace-pre-line text-ink/90">
+              <TextWithLinks text={block.content || ""} links={block.links} />
+            </p>
+          </div>
+        );
+      }
       return (
-        <div 
-          className={`prose max-w-none mb-8 ${isSideBySide ? 'flex-1' : ''}`}
-          style={getBlockStyles()}
-        >
-          {block.title && (
-            <h2 
-              className="text-2xl font-bold mb-4"
-              style={block.style?.textColor ? { color: block.style.textColor } : undefined}
-            >
-              {block.title}
-            </h2>
-          )}
-          <p 
-            className="text-gray-700 leading-relaxed whitespace-pre-line"
-            style={block.style?.textColor ? { color: block.style.textColor } : undefined}
-          >
-            {renderTextWithLinks(block.content || '', block.links)}
+        <div className={`mb-8 ${flex}`} style={spacing}>
+          {block.title && <h2 className="type-heading mb-3 mt-6 text-2xl">{block.title}</h2>}
+          <p className="max-w-prose whitespace-pre-line text-ink/90">
+            <TextWithLinks text={block.content || ""} links={block.links} />
           </p>
         </div>
       );
 
-    case 'image':
+    case "image":
       return (
-        <div 
-          className={`mb-8 ${isSideBySide ? 'flex-1' : ''}`}
-          style={getBlockStyles()}
-        >
-          <div className={`bg-white rounded-lg p-4 ${isSideBySide ? '' : 'shadow-md'}`}>
-            <div className="aspect-w-16 aspect-h-9 relative" style={{ minHeight: block.minHeight, maxHeight: block.maxHeight, minWidth: block.minWidth, maxWidth: block.maxWidth }}>
-              <Image
-                src={block.url!}
-                alt={block.alt || ''}
-                fill
-                className="object-cover rounded-lg"
-              />
-            </div>
-            {block.referenceText && (
-              <p 
-                className="text-gray-500 text-sm mt-2 italic"
-                style={block.style?.textColor ? { color: block.style.textColor } : undefined}
-              >
-                {block.referenceText}
-              </p>
-            )}
-          </div>
-        </div>
-      );
-
-    case 'video':
-      return (
-        <div 
-          className={`mb-8 ${isSideBySide ? 'flex-1' : ''}`}
-          style={getBlockStyles()}
-        >
-          <div className="bg-white rounded-lg shadow-md p-4">
-            <div className="aspect-w-16 aspect-h-9" style={{ minHeight: block.minHeight, maxHeight: block.maxHeight, minWidth: block.minWidth, maxWidth: block.maxWidth }}>
-              <video
-                src={block.url}
-                className="rounded-lg"
-                style={{ minHeight: block.minHeight, maxHeight: block.maxHeight, minWidth: block.minWidth, maxWidth: block.maxWidth }}                
-                controls
-              />
-            </div>
-            {block.referenceText && (
-              <p 
-                className="text-gray-500 text-sm mt-2 italic"
-                style={block.style?.textColor ? { color: block.style.textColor } : undefined}
-              >
-                {block.referenceText}
-              </p>
-            )}
-          </div>
-        </div>
-      );
-
-    case 'build':
-      return (
-        <div 
-          className={`mb-8 ${isSideBySide ? 'flex-1' : ''}`}
-          style={getBlockStyles()}
-        >
-          <div className="bg-white rounded-lg shadow-md p-4">
-            <div className="aspect-w-16 aspect-h-9">
-              {!isBuildLoaded ? (
-                <div 
-                  className="w-full h-full min-h-[400px] flex items-center justify-center relative"
-                  style={{
-                    minHeight: block.minHeight,
-                    maxHeight: block.maxHeight,
-                    minWidth: block.minWidth,
-                    maxWidth: block.maxWidth,
-                    backgroundImage: `url(${block.thumbnail || '/images/tower/tower.png'})`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center'
-                  }}
-                >
-                  <div className="absolute inset-0 bg-black bg-opacity-50" />
-                  <button
-                    onClick={() => setIsBuildLoaded(true)}
-                    className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors relative z-10"
-                  >
-                    Play Game
-                  </button>
-                </div>
-              ) : (
-                <div className="relative w-full h-full">
-                  <iframe
-                    src={block.url}
-                    style={{
-                      minHeight: block.minHeight,
-                      maxHeight: block.maxHeight,
-                      minWidth: block.minWidth,
-                      maxWidth: block.maxWidth,
-                    }}
-                    className="w-full h-full rounded-lg"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  />
-                  <button
-                    onClick={() => setIsBuildLoaded(false)}
-                    className="absolute top-2 right-2 px-3 py-1 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm"
-                  >
-                    Unload Game
-                  </button>
-                </div>
-              )}
-            </div>
-            {block.referenceText && (
-              <p 
-                className="text-gray-500 text-sm mt-2 italic"
-                style={block.style?.textColor ? { color: block.style.textColor } : undefined}
-              >
-                {block.referenceText}
-              </p>
-            )}
-          </div>
-        </div>
-      );
-
-    case 'code':
-      return (
-        <div 
-          className={`mb-8 ${isSideBySide ? 'flex-1' : ''}`}
-        >
-          <div 
-            className="bg-white rounded-lg shadow-md p-4 w-full"
-            style={getBlockStyles()}
+        <figure className={`mb-8 ${flex}`}>
+          <div
+            className="relative w-full overflow-hidden rounded-md border border-line bg-scene"
+            style={{ height: block.minHeight ?? 300, maxHeight: block.maxHeight }}
           >
-            {block.title && (
-              <h3 className="text-lg font-semibold mb-2">{block.title}</h3>
-            )}
-            <div className="w-full">
-              <CodeBlock
-                codeFile={block.codeFile!}
-                language={block.language}
-                startLine={block.startLine}
-                endLine={block.endLine}
-                style={{
-                  width: '100%',
-                  ...(block.style?.flexBasis && { flexBasis: block.style.flexBasis }),
-                  ...(block.style?.maxWidth && { maxWidth: block.style.maxWidth }),
-                }}
+            <Image src={block.url!} alt={block.alt || ""} fill sizes="(min-width: 1024px) 50vw, 100vw" className="object-contain" />
+          </div>
+          <Caption text={block.referenceText} />
+        </figure>
+      );
+
+    case "video": {
+      const youtube = block.url?.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]+)/);
+      return (
+        <figure className={`mb-8 ${flex}`}>
+          <div className="relative aspect-video w-full overflow-hidden rounded-md border border-line bg-scene">
+            {youtube ? (
+              <iframe
+                src={`https://www.youtube-nocookie.com/embed/${youtube[1]}`}
+                title={block.referenceText || "Video"}
+                className="absolute inset-0 h-full w-full"
+                allow="encrypted-media; picture-in-picture"
+                allowFullScreen
               />
-            </div>
-            {block.referenceText && (
-              <p className="text-gray-500 text-sm mt-2 italic">
-                {block.referenceText}
-              </p>
+            ) : (
+              <video src={block.url} className="absolute inset-0 h-full w-full" controls preload="metadata" />
             )}
           </div>
+          <Caption text={block.referenceText} />
+        </figure>
+      );
+    }
+
+    case "build":
+      return <div className={flex}><Build block={block} /></div>;
+
+    case "code":
+      return (
+        <figure className={`mb-8 ${flex}`}>
+          {block.title && <h3 className="type-title mb-2">{block.title}</h3>}
+          <CodeBlock codeFile={block.codeFile!} language={block.language} startLine={block.startLine} endLine={block.endLine} />
+          <Caption text={block.referenceText} />
+        </figure>
+      );
+
+    case "download":
+      return (
+        <div className={`mb-8 flex items-center justify-between gap-4 rounded-md border border-line bg-surface/90 p-4 ${flex}`}>
+          <div>
+            {block.title && <p className="font-semibold">{block.title}</p>}
+            <p className="text-sm text-muted">{[block.fileType, block.fileSize].filter(Boolean).join(", ")}</p>
+          </div>
+          <a href={block.url} download={block.fileName} className="btn">Download</a>
         </div>
       );
 
-    case 'download':
+    case "list":
       return (
-        <div 
-          className={`mb-8 ${isSideBySide ? 'flex-1' : ''}`}
-          style={getBlockStyles()}
-        >
-          <div className="bg-white rounded-lg shadow-md p-4">
-            <div className="flex items-center justify-between">
-              <div className="flex-1">
-                {block.title && (
-                  <h3 
-                    className="text-lg font-semibold mb-1"
-                    style={block.style?.textColor ? { color: block.style.textColor } : undefined}
-                  >
-                    {block.title}
-                  </h3>
-                )}
-                <div 
-                  className="text-sm text-gray-600"
-                  style={block.style?.textColor ? { color: block.style.textColor } : undefined}
-                >
-                  {block.fileType && <span className="mr-2">{block.fileType}</span>}
-                  {block.fileSize && <span>{block.fileSize}</span>}
-                </div>
-              </div>
-              <a
-                href={block.url}
-                download={block.fileName}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-              >
-                Download
-              </a>
-            </div>
-            {block.referenceText && (
-              <p 
-                className="text-gray-500 text-sm mt-2 italic"
-                style={block.style?.textColor ? { color: block.style.textColor } : undefined}
-              >
-                {block.referenceText}
-              </p>
-            )}
-          </div>
-        </div>
-      );
-
-    case 'list':
-      return (
-        <div 
-          className={`prose max-w-none mb-8 ${isSideBySide ? 'flex-1' : ''}`}
-          style={getBlockStyles()}
-        >
-          {block.title && (
-            <h2 
-              className="text-2xl font-bold mb-4"
-              style={block.style?.textColor ? { color: block.style.textColor } : undefined}
-            >
-              {block.title}
-            </h2>
-          )}
-          {block.subheading && (
-            <h3 
-              className="text-lg font-semibold mb-3"
-              style={block.style?.textColor ? { color: block.style.textColor } : undefined}
-            >
-              {block.subheading}
-            </h3>
-          )}
-          <ul className="list-disc pl-6 space-y-2">
-            {block.items?.map((item, index) => (
-              <li 
-                key={index}
-                className="text-gray-700"
-                style={block.style?.textColor ? { color: block.style.textColor } : undefined}
-              >
-                {renderTextWithLinks(item, block.links)}
-              </li>
+        <div className={`mb-8 prose-case ${flex}`}>
+          {block.title && <h2>{block.title}</h2>}
+          {block.subheading && <h3 className="!mt-0">{block.subheading}</h3>}
+          <ul>
+            {block.items?.map((item, i) => (
+              <li key={i}><TextWithLinks text={item} links={block.links} /></li>
             ))}
           </ul>
         </div>
@@ -341,4 +178,25 @@ export function ContentBlock({ block, isSideBySide = false }: ContentBlockProps)
     default:
       return null;
   }
-} 
+}
+
+// Renders a list of blocks, pairing any block marked sideBySide with the one after it.
+export function BlockList({ blocks }: { blocks: ContentBlockType[] }) {
+  const out: JSX.Element[] = [];
+  for (let i = 0; i < blocks.length; i++) {
+    const block = blocks[i];
+    const next = blocks[i + 1];
+    if (block.sideBySide && next) {
+      out.push(
+        <div key={i} className="flex flex-col gap-6 md:flex-row md:items-start md:gap-10">
+          <ContentBlock block={block} isSideBySide />
+          <ContentBlock block={next} isSideBySide />
+        </div>,
+      );
+      i++;
+    } else {
+      out.push(<ContentBlock key={i} block={block} />);
+    }
+  }
+  return <>{out}</>;
+}
