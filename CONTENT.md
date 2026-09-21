@@ -194,14 +194,12 @@ Tiles only: thumbnail, title, one line, "Play" link. No per-game essays. Fix Int
 
 ---
 
-## 6. Base résumé (derive from `resume-latex/GamesJan2026.tex`)
+## 6. Base résumé
 
-- Title: Game Developer & Technical Director (tailored variants swap this line and the summary).
-- Add Panda Paw as the top role, reuse the §1 bullets (tightened to 3–4).
-- City Hive down to one line.
-- Keep the NOVOS metrics here (résumé only).
-- Selected Projects: CatchUp, Swipers level generation, Local Multi-Control, Tower. Drop Spinning Roles, Berto, Super Session.
-- Fix portfolio links to the new routes.
+Source: `resume-latex/Base2026.tex` (compiles on Overleaf with pdfLaTeX, or locally with XeTeX).
+- `\publicfalse` (default): the version you send to people, with phone number and NOVOS metrics. Built copy: `resume-latex/Guy Ginat - Resume.pdf`.
+- `\publictrue`: the version linked from the site's hero, `public/guy-ginat-resume.pdf`. No phone, no NOVOS metrics.
+- Tailor per role by changing `\roletitle`, the summary, and the order of Selected Projects. `GamesJan2026.tex` is kept as the old base.
 
 ---
 

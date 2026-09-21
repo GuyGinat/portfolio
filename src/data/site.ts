@@ -8,8 +8,8 @@ export const profile = {
     "Co-founder of Panda Paw, shipping CatchUp on Steam on November 11, 2026.",
   bio:
     "I build the systems games run on: procedural generation, multiplayer netcode, and the tools that let a small team move fast. Before co-founding Panda Paw I led Unity development on a shipped mobile game and spent two years as a full-stack engineer, then earned an MFA in Game Design at NYU.",
-  // Set to "/guy-ginat-resume.pdf" once the PDF is in public/.
-  resume: null as string | null,
+  // Public build of resume-latex/Base2026.tex (\publictrue): no phone, no NOVOS metrics.
+  resume: "/guy-ginat-resume.pdf" as string | null,
   links: {
     steam: "https://store.steampowered.com/app/4698980",
     linkedin: "https://www.linkedin.com/in/guy-ginat/",
