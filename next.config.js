@@ -8,6 +8,7 @@ const nextConfig = {
     // Old URLs that went out on earlier résumés.
     return [
       { source: "/tower", destination: "/work/tower", permanent: true },
+      { source: "/work/local-multi-control", destination: "/lab/local-multi-control", permanent: true },
       { source: "/games/:slug", destination: "/lab/:slug", permanent: true },
       { source: "/tech/unity-tools", destination: "/tools/unity-tools", permanent: true },
       { source: "/tech/star-chart", destination: "/tools/star-chart", permanent: true },

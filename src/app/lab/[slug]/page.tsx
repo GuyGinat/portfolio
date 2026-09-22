@@ -27,6 +27,13 @@ export default function LabPage({ params }: { params: { slug: string } }) {
           <iframe src={game.externalUrl} title={game.title} className="absolute inset-0 h-full w-full" allowFullScreen />
         </div>
       )}
+      {game.links && (
+        <div className="mb-10 flex flex-wrap gap-3">
+          {game.links.map((l) => (
+            <a key={l.href} href={l.href} target="_blank" rel="noopener noreferrer" className="btn">{l.label}</a>
+          ))}
+        </div>
+      )}
       {game.content && (
         <div className="rounded-md border border-line bg-surface/90 px-5 py-8 backdrop-blur-sm sm:px-10">
           <BlockList blocks={game.content} />

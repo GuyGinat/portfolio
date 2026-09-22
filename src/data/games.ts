@@ -5,7 +5,8 @@ export type Game = {
   title: string;
   description: string;
   tags: string[];
-  thumbnail: string;
+  thumbnail?: string; // omitted entries fall back to the slots illustration
+  links?: { label: string; href: string }[];
   buildUrl?: string;
   externalUrl?: string;
   content?: ContentBlock[];  // Optional array of content blocks
@@ -19,6 +20,23 @@ const textStyle = {
 }
 
 export const games: Game[] = [
+  {
+    slug: "local-multi-control",
+    title: "Local Multi-Control",
+    description: "A Slay the Spire 2 mod that runs the game's multiplayer mode solo, with up to 12 characters.",
+    tags: ["Mod", "C#", "HarmonyX"],
+    links: [
+      { label: "Steam Workshop", href: "https://steamcommunity.com/sharedfiles/filedetails/?id=3772900244" },
+      { label: "Source on GitHub", href: "https://github.com/GuyGinat/STS2_DualRoleAdventure" },
+    ],
+    content: [
+      {
+        type: "text",
+        content: "Local Multi-Control lets one person play Slay the Spire 2's multiplayer mode alone, controlling 2 to 12 characters on one machine and switching between them with Tab.\n\nI took over maintenance from the original author, with their permission, and keep it working across the game's frequent beta patches: decompile each new build, diff it against the last one, and sweep every string-based reflection target so nothing silently breaks. Live on the Steam Workshop with 445 subscribers.",
+        style: textStyle
+      },
+    ]
+  },
   {
     slug: "belgrad",
     title: "Belgrad Park",

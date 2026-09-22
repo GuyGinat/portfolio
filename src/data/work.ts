@@ -114,40 +114,6 @@ export const work: CaseStudy[] = [
     note: "The diagram is a schematic of the pipeline order, not a generated level.",
   },
   {
-    slug: "local-multi-control",
-    title: "Local Multi-Control",
-    summary:
-      "A Slay the Spire 2 mod that lets one player drive up to 12 characters through the game's real multiplayer pipeline.",
-    tint: "#8a5cd6",
-    role: "Maintainer since July 2026",
-    timeline: "July 2026 to now",
-    stack: ["C#", ".NET 9", "Godot 4.5", "HarmonyX", "Steam Workshop"],
-    links: [
-      { label: "Steam Workshop", href: "https://steamcommunity.com/sharedfiles/filedetails/?id=3772900244" },
-      { label: "Source on GitHub", href: "https://github.com/GuyGinat/STS2_DualRoleAdventure" },
-    ],
-    cover: { kind: "slots" },
-    overview: [
-      "Local Multi-Control lets one person play Slay the Spire 2's multiplayer mode alone, controlling 2 to 12 characters on one machine and switching between them with Tab.",
-      "I took over maintenance from the original author, with their permission, and keep it working across the game's frequent beta patches.",
-    ],
-    built: [
-      {
-        title: "Patch adaptation",
-        body: "A repeatable workflow for every game update: decompile the new build, diff it against the last one, and sweep every string-based reflection target so nothing silently breaks.",
-      },
-      {
-        title: "Fixes and features",
-        body: "Reward merging across characters, input and overlay fixes, an opt-in cross-character card reward, and minimum-version gating so players on an unsupported game build get a clear message instead of a crash.",
-      },
-      {
-        title: "Release management",
-        body: "Versioned releases through v1.33, a public issue tracker, and Workshop metadata in English and Chinese for the mod's two main audiences.",
-      },
-    ],
-    result: "Live on the Steam Workshop with 445 subscribers and 113 favorites.",
-  },
-  {
     slug: "tower",
     title: "Tower",
     summary:

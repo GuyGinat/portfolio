@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import MoodSection from "@/components/background/MoodSection";
+import { SlotsStrip } from "@/components/work/SlotsStrip";
 import { WorkCard } from "@/components/work/WorkCard";
 import { experience, profile, tools } from "@/data/site";
 import { work } from "@/data/work";
@@ -16,7 +17,7 @@ function SectionHeading({ id, children, intro }: { id: string; children: React.R
 }
 
 export default function Home() {
-  const [catchup, swipers, mod, tower] = work;
+  const [catchup, swipers, tower] = work;
 
   return (
     <>
@@ -49,9 +50,8 @@ export default function Home() {
           <SectionHeading id="work">Selected work</SectionHeading>
           <div className="flex flex-col gap-6">
             <WorkCard study={catchup} layout="feature" />
-            <WorkCard study={swipers} layout="wide" />
             <div className="grid gap-6 md:grid-cols-2">
-              <WorkCard study={mod} layout="half" />
+              <WorkCard study={swipers} layout="half" />
               <WorkCard study={tower} layout="half" />
             </div>
           </div>
@@ -102,7 +102,7 @@ export default function Home() {
 
       <MoodSection mood="quiet" aria-labelledby="lab" className="py-14 sm:py-20">
         <div className="page">
-          <SectionHeading id="lab" intro="Short experiments in input, physics and systems, each built in days. Most are playable in the browser.">
+          <SectionHeading id="lab" intro="Jam games, experiments and side projects. Most are playable in the browser.">
             Lab
           </SectionHeading>
           <ul className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
@@ -110,7 +110,9 @@ export default function Home() {
               <li key={game.slug}>
                 <Link href={`/lab/${game.slug}`} className="group block">
                   <div className="relative aspect-video overflow-hidden rounded-md border border-line bg-surface transition-colors group-hover:border-accent/70">
-                    <Image src={game.thumbnail} alt="" fill sizes="(min-width: 1024px) 25vw, 50vw" className="object-cover" />
+                    {game.thumbnail
+                      ? <Image src={game.thumbnail} alt="" fill sizes="(min-width: 1024px) 25vw, 50vw" className="object-cover" />
+                      : <SlotsStrip />}
                   </div>
                   <p className="type-title mt-3 text-ink">{game.title}</p>
                   <p className="mt-1 text-sm text-muted">{game.description}</p>

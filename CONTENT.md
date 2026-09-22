@@ -40,19 +40,20 @@ Right now I'm co-founder and Technical Director at Panda Paw, a funded indie stu
 
 Before Panda Paw I led Unity development of a live mobile game at NOVOS, worked as a full-stack engineer at Picafuel and City Hive (React, Node, Python, Rails), earned a BSc in Computer Science at Reichman University and an MFA in Game Design at the NYU Game Center.
 
-I also maintain Local Multi-Control, a Slay the Spire 2 mod on the Steam Workshop that lets one player drive up to 12 characters through the game's real multiplayer pipeline.
-
 Portfolio: guyginat.xyz
 ```
 
 ### Experience
 
 **Co-founder & Technical Director** · Panda Paw · Mar 2026 – Present · New York
-- Co-founded Panda Paw, a funded five-person indie studio, launching CatchUp, an online co-op climbing game, on Steam on Nov 11, 2026.
-- Own the technical stack: Unity 6, Photon Fusion 2 (host-authoritative, client-predicted physics), FMOD, Steamworks (achievements, cloud save, leaderboards, lobbies).
-- Built the studio's release pipeline: one-command Unity builds, Plastic SCM changeset versioning, Steam branch deployment, Discord notifications, plus telemetry and crash reporting with build-tagged breadcrumbs.
-- Designed and built the procedural level generator for our first title, Swipers (≈54k lines of runtime and editor code): a deterministic, seed-synced pipeline with a designer-facing workbench.
-- Shipped the CatchUp Steam demo and took it through Steam Next Fest (Oct 2026).
+```
+Co-founded Panda Paw, a funded five-person indie studio. Our online co-op game CatchUp is in Steam Next Fest and launches on Steam on November 11, 2026.
+
+• Own the technical stack: Unity 6, host-authoritative Photon Fusion 2 with client-predicted physics, FMOD, and Steamworks (lobbies, achievements, cloud save, leaderboards).
+• Designed a netcode model where the whole world derives from two networked values, so late joiners rebuild the scene from a few bytes. Cut per-player network state by about 25% while fixing client stutter.
+• Built the release pipeline: one command from Plastic SCM changeset to versioned build, Steam branch and Discord, plus telemetry and crash reporting with build-tagged breadcrumbs.
+• Led the procedural level generator for our first title, Swipers: a deterministic, seed-synced 16-stage pipeline with a designer-facing Level Workbench and background-thread generation.
+```
 
 **Senior Software Engineer** · City Hive · Sep 2025 – Mar 2026 · New York
 - Worked on the build and release pipeline behind ~5,000 white-label commerce apps.
@@ -81,7 +82,6 @@ Portfolio: guyginat.xyz
 ### Featured section
 1. CatchUp on Steam: https://store.steampowered.com/app/4698980
 2. Portfolio: https://guyginat.xyz
-3. Local Multi-Control on the Steam Workshop: https://steamcommunity.com/sharedfiles/filedetails/?id=3772900244
 
 ### Settings
 - Turn off "Open to work".
@@ -92,7 +92,7 @@ Portfolio: guyginat.xyz
 ## 2. Site structure
 
 1. **Hero:** name, title, one-liner, short bio. Buttons: Wishlist CatchUp · Résumé (PDF) · Email · GitHub.
-2. **Featured work:** four case studies (§3). CatchUp is visually the largest.
+2. **Featured work:** three case studies (§3). CatchUp is visually the largest.
 3. **Experience:** a compact strip mirroring §1.
 4. **Tools & Systems:** §4.
 5. **Lab:** §5.
@@ -147,17 +147,7 @@ Each page follows the same header block: **Role · Team · Timeline · Stack · 
 
 **Media:** *needs capture*: Level Workbench layout preview regenerating across seeds (GIF), stage-by-stage build of one level, a fly-through. Existing sources: `Recordings/Movie_007..009.mp4` (Apr 2026), `Assets/Docs/LevelGeneration/*.html` presentations and the development-history PDF (diagrams can be lifted from these).
 
-### 3.3 Local Multi-Control (Slay the Spire 2 mod)
-- **Role:** Maintainer (inherited the project from its original author in Jul 2026)
-- **Stack:** C# · .NET 9 · Godot 4.5 · HarmonyX · Steam Workshop
-- **Links:** Workshop · GitHub
-
-**Overview.** A mod that lets one player control 2 to 12 characters in Slay the Spire 2 by driving the game's real multiplayer pipeline locally. I took over maintenance from the original author and keep it working across the game's frequent beta patches.
-
-**What I built:** patch-adaptation workflow (decompile, diff, string-reflection sweep after each game update), reward-merge and input fixes, version gating, and release management through v1.33.
-**Result:** live on the Steam Workshop with 445 subscribers and 113 favorites (Sep 2026).
-
-### 3.4 Tower: radial grid design research
+### 3.3 Tower: radial grid design research
 - **Role:** Solo designer and developer
 - **Timeline:** 2024 – 2025
 - **Stack:** Unity · C# · FMOD · Playdate SDK (Lua) · Adobe Illustrator scripting · laser cutting
@@ -188,7 +178,7 @@ Each page follows the same header block: **Role · Team · Timeline · Stack · 
 Intro line:
 > Short experiments in input, physics and systems, each built in days.
 
-Belgrad Park · Spinning Roles · Berto · Pusher · Jiggle Jaggle Juggling · Intergalactic Animal Control · Massivesweeper
+Local Multi-Control (Slay the Spire 2 mod, maintenance) · Belgrad Park · Spinning Roles · Berto · Pusher · Jiggle Jaggle Juggling · Intergalactic Animal Control · Massivesweeper
 
 Tiles only: thumbnail, title, one line, "Play" link. No per-game essays. Fix Intergalactic's description (currently duplicates Berto's).
 
